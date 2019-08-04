@@ -18,10 +18,10 @@
 #   recommended to use a multi-core machine for the preprocessing 
 #   step and set this value to the number of cores.
 # PYTHON - python3 interpreter alias.
-TRAIN_DIR=my_train_dir
-VAL_DIR=my_val_dir
-TEST_DIR=my_test_dir
-DATASET_NAME=my_dataset
+TRAIN_DIR=data/rawjavacode0804/my_train_dir
+VAL_DIR=data/rawjavacode0804/my_val_dir
+TEST_DIR=data/rawjavacode0804/my_test_dir
+DATASET_NAME=mydataset0804
 MAX_CONTEXTS=200
 WORD_VOCAB_SIZE=1301136
 PATH_VOCAB_SIZE=911417
@@ -43,9 +43,12 @@ ${PYTHON} JavaExtractor/extract.py --dir ${VAL_DIR} --max_path_length 8 --max_pa
 echo "Finished extracting paths from validation set"
 echo "Extracting paths from test set..."
 ${PYTHON} JavaExtractor/extract.py --dir ${TEST_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} > ${TEST_DATA_FILE}
-echo "Finished extracting paths from test set"
+# echo "Finished extracting paths from test set"
+# echo "Extracting paths from training set..."
+# ${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} | shuf > ${TRAIN_DATA_FILE}
+
 echo "Extracting paths from training set..."
-${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} | shuf > ${TRAIN_DATA_FILE}
+${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} > ${TRAIN_DATA_FILE}
 echo "Finished extracting paths from training set"
 
 TARGET_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.tgt.c2v
