@@ -36,14 +36,16 @@ public class FeatureExtractor {
 		this.m_CommandLineValues = commandLineValues;
 	}
 
-	public ArrayList<ProgramFeatures> extractFeatures(String code) throws ParseException, IOException {
+	public ArrayList<ProgramFeatures> extractFeatures(String filePath, String code) throws ParseException, IOException {
 		CompilationUnit compilationUnit = parseFileWithRetries(code);
 		FunctionVisitor functionVisitor = new FunctionVisitor();
 
 		functionVisitor.visit(compilationUnit, null);
 
 		ArrayList<MethodContent> methods = functionVisitor.getMethodContents();
-		ArrayList<ProgramFeatures> programs = generatePathFeatures(methods);
+
+
+		ArrayList<ProgramFeatures> programs = generatePathFeatures(filePath, methods);
 
 		return programs;
 	}
@@ -74,13 +76,13 @@ public class FeatureExtractor {
 		return parsed;
 	}
 
-	public ArrayList<ProgramFeatures> generatePathFeatures(ArrayList<MethodContent> methods) {
+	public ArrayList<ProgramFeatures> generatePathFeatures(String filePath, ArrayList<MethodContent> methods) {
 		ArrayList<ProgramFeatures> methodsFeatures = new ArrayList<>();
 		for (MethodContent content : methods) {
 			if (content.getLength() < m_CommandLineValues.MinCodeLength
 					|| content.getLength() > m_CommandLineValues.MaxCodeLength)
 				continue;
-			ProgramFeatures singleMethodFeatures = generatePathFeaturesForFunction(content);
+			ProgramFeatures singleMethodFeatures = generatePathFeaturesForFunction(filePath, content);
 			if (!singleMethodFeatures.isEmpty()) {
 				methodsFeatures.add(singleMethodFeatures);
 			}
@@ -88,9 +90,9 @@ public class FeatureExtractor {
 		return methodsFeatures;
 	}
 
-	private ProgramFeatures generatePathFeaturesForFunction(MethodContent methodContent) {
+	private ProgramFeatures generatePathFeaturesForFunction(String filePath, MethodContent methodContent) {
 		ArrayList<Node> functionLeaves = methodContent.getLeaves();
-		ProgramFeatures programFeatures = new ProgramFeatures(methodContent.getName());
+		ProgramFeatures programFeatures = new ProgramFeatures(filePath, methodContent.getName());
 
 		for (int i = 0; i < functionLeaves.size(); i++) {
 			for (int j = i + 1; j < functionLeaves.size(); j++) {

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProgramFeatures {
+	private String programPath ;
+
 	private String name;
 
 	private ArrayList<ProgramRelation> features = new ArrayList<>();
@@ -14,10 +16,16 @@ public class ProgramFeatures {
 		this.name = name;
 	}
 
+	public ProgramFeatures(String programPath, String name) {
+		this.name=name;
+		this.programPath=programPath;
+	}
+
 	@SuppressWarnings("StringBufferReplaceableByString")
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(programPath).append("+");
 		stringBuilder.append(name).append(" ");
 		stringBuilder.append(features.stream().map(ProgramRelation::toString).collect(Collectors.joining(" ")));
 
