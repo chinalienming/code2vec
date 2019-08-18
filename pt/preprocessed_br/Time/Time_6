@@ -1,0 +1,10 @@
+question behaviour gjchronolog date pass bc 
+expect follow test pass 
+chronolog chronolog gjchronolog get instanc 
+local date start new local date chronolog 
+local date expect end new local date chronolog bc 
+assert start minu year equal expect end 
+assert start plu period year equal expect end 
+error give 
+org joda time illeg field valu except valu year support 
+howev never provid year thought job framework skip non exist year return bc 

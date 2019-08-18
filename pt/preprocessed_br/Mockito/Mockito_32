@@ -1,0 +1,6 @@
+mockito creat mock public class extend packag privat class 
+creat simpl project demonstr 
+http github com astafev mockito packag privat class 
+pleas take look even implement think mockito throw normal except time creation 
+variant first creation return wrong work mock invok real method instead stub second creation throw except realli connect problem 
+everyth work fine mock packag privat parent 

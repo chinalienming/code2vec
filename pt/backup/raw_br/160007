@@ -1,0 +1,3 @@
+Bug 160007 - Chkpii error in latest build
+eclipse/plugins/org.eclipse.ant.ui_3.2.100.N20061006-0010_jar/lib/remoteAnt_jar/org/eclipse/ant/internal/ui/antsupport/
+  RemoteAntMessages.properties  JAVA2-PRB   919   Found 2 consecutive single quotes in text not handled by Java MessageFormat class. Remove 1 quote.  Line: 50

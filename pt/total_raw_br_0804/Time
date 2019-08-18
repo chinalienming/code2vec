@@ -1,0 +1,428 @@
+1		src/main/java/org/joda/time/Partial.java内public Partial(DateTimeFieldType[] types, int[] values, Chronology chronology)外src/main/java/org/joda/time/field/UnsupportedDurationField.java内public long getUnitMillis()	8612f9e5b88c1bea933ef9ab1e431f5db3006b48	9a62b06be5d0df8e833ff8583398cca386608cac	93	https://github.com/JodaOrg/joda-time/issues/93	Partial.with fails with NPE	With the latest master: new Partial(yearOfCentury(),  1).with(weekyear(), 1);
+// NullPointerException
+// org.joda.time.Partial.with (Partial.java:447)
+Fails with yearOfCentury, year and yearOfEra. Probably because weekyear has a null range duration type.	src/main/java	src/test/java
+2		src/main/java/org/joda/time/Partial.java内public Partial(DateTimeFieldType[] types, int[] values, Chronology chronology)外src/main/java/org/joda/time/Partial.java内public Partial with(DateTimeFieldType fieldType, int value)外src/main/java/org/joda/time/field/UnsupportedDurationField.java内public long getUnitMillis()	8d109fe1a999a11b4557536dd96f9210460a5936	8612f9e5b88c1bea933ef9ab1e431f5db3006b48	93	https://github.com/JodaOrg/joda-time/issues/93	Partial.with fails with NPE	With the latest master: new Partial(yearOfCentury(),  1).with(weekyear(), 1);
+// NullPointerException
+// org.joda.time.Partial.with (Partial.java:447)
+Fails with yearOfCentury, year and yearOfEra. Probably because weekyear has a null range duration type.	src/main/java	src/test/java
+3		src/main/java/org/joda/time/MutableDateTime.java内public void add(DurationFieldType type, int amount)外src/main/java/org/joda/time/MutableDateTime.java内public void setYear(final int year)外src/main/java/org/joda/time/MutableDateTime.java内public void setWeekyear(final int weekyear)外src/main/java/org/joda/time/MutableDateTime.java内public void setMonthOfYear(final int monthOfYear)外src/main/java/org/joda/time/MutableDateTime.java内public void setWeekOfWeekyear(final int weekOfWeekyear)外src/main/java/org/joda/time/MutableDateTime.java内public void setDayOfWeek(final int dayOfWeek)外src/main/java/org/joda/time/MutableDateTime.java内public void setHourOfDay(final int hourOfDay)外src/main/java/org/joda/time/MutableDateTime.java内public void setMinuteOfHour(final int minuteOfHour)外src/main/java/org/joda/time/MutableDateTime.java内public void setSecondOfMinute(final int secondOfMinute)外src/main/java/org/joda/time/MutableDateTime.java内public void setMillisOfSecond(final int millisOfSecond)	3ba9ba799b3261b7332a467a88be142c83b298fd	8d109fe1a999a11b4557536dd96f9210460a5936	77	https://github.com/JodaOrg/joda-time/issues/77	addDays(0) changes value of MutableDateTime	Upon DST transition from summer to winter time zone, adding the amount of zero days to a mutable date time object changes the value of the object.
+The code
+final MutableDateTime mdt = new MutableDateTime(2011, 10, 30, 3, 0, 0, 0, DateTimeZone.forID("Europe/Berlin"));
+System.out.println("Start date:   " + mdt + " (" + mdt.toInstant().getMillis() + ")");
+mdt.addHours(-1);
+System.out.println("addHours(-1): " + mdt + " (" + mdt.toInstant().getMillis() + ")");
+mdt.addHours(0);
+System.out.println("addHours(0):  " + mdt + " (" + mdt.toInstant().getMillis() + ")");
+mdt.addDays(0);
+System.out.println("addDays(0):   " + mdt + " (" + mdt.toInstant().getMillis() + ")");	src/main/java	src/test/java
+4		src/main/java/org/joda/time/Partial.java内public Partial with(DateTimeFieldType fieldType, int value)	bcb044669b4d1f8d334861ccbd169924d6ef3b54	3ba9ba799b3261b7332a467a88be142c83b298fd	88	https://github.com/JodaOrg/joda-time/issues/88	Constructing invalid Partials	Partials can be constructed by invoking a constructor Partial(DateTimeFieldType[], int[]) or by merging together a set of partials using with, each constructed by calling Partial(DateTimeFieldType, int), e.g.:
+Partial a = new Partial(new DateTimeFieldType[] { year(), hourOfDay() }, new int[] { 1, 1});
+Partial b = new Partial(year(), 1).with(hourOfDay(), 1);
+assert(a == b);
+However, the above doesn't work in all cases:
+new Partial(new DateTimeFieldType[] { clockhourOfDay(), hourOfDay() }, new int[] { 1, 1}); // throws Types array must not contain duplicate
+new Partial(clockhourOfDay(), 1).with(hourOfDay(), 1); // #<Partial [clockhourOfDay=1, hourOfDay=1]>	src/main/java	src/test/java
+5		src/main/java/org/joda/time/Period.java内public Period normalizedStandard(PeriodType type)	a38b5e0c620a4a4dc310d35105e3e432c4e91fc3	a6cb59ed2280ab0a32995fa8b5f1a7b0d47cb815	79	https://github.com/JodaOrg/joda-time/issues/79	none standard PeriodType without year throws exception	Hi.
+I tried to get a Period only for months and weeks with following code:
+Period p = new Period(new DateTime(startDate.getTime()), new DateTime(endDate.getTime()), PeriodType.forFields(new DurationFieldType[]{DurationFieldType.months(), DurationFieldType.weeks()})).normalizedStandard(PeriodType.forFields(new DurationFieldType[]{DurationFieldType.months(), DurationFieldType.weeks()}));
+return p.getMonths();
+This throws following exception:
+ 10-17 14:35:50.999: E/AndroidRuntime(1350): java.lang.UnsupportedOperationException: Field is not supported
+ 10-17 14:35:50.999: E/AndroidRuntime(1350): at org.joda.time.PeriodType.setIndexedField(PeriodType.java:690)
+ 10-17 14:35:50.999: E/AndroidRuntime(1350): at org.joda.time.Period.withYears(Period.java:896) 10-17
+ 14:35:50.999: E/AndroidRuntime(1350): at org.joda.time.Period.normalizedStandard(Period.java:1630)
+Even removing the year component with .withYearsRemoved() throws the same exception:
+this works:
+Period p = new Period(new DateTime(startDate.getTime()), new DateTime(endDate.getTime()), PeriodType.standard()).normalizedStandard(PeriodType.standard());
+return p.getMonths();
+this fails:
+Period p = new Period(new DateTime(startDate.getTime()), new DateTime(endDate.getTime()), PeriodType.standard().withYearsRemoved()).normalizedStandard(PeriodType.standard().withYearsRemoved());
+return p.getMonths();	src/main/java	src/test/java
+6		src/main/java/org/joda/time/chrono/GJChronology.java内public static synchronized GJChronology getInstance(DateTimeZone zone, ReadableInstant gregorianCutover, int minDaysInFirstWeek)外src/main/java/org/joda/time/chrono/GJChronology.java内public long add(long instant, int value)外src/main/java/org/joda/time/chrono/GJChronology.java内public long add(long instant, long value)	91b1ba4ed42ca0b345370ea3cc0ddcdb33781c6d	28aeba952e838fb12c9b934ce6ef65658e45d7b2	28	https://github.com/JodaOrg/joda-time/issues/28	Questionable behaviour of GJChronology when dates pass 1BC	I expect the following test to pass:
+Chronology chronology = GJChronology.getInstance();
+LocalDate start = new LocalDate(2013, 5, 31, chronology);
+LocalDate expectedEnd = new LocalDate(-1, 5, 31, chronology); // 1 BC
+assertThat(start.minusYears(2013), is(equalTo(expectedEnd)));
+assertThat(start.plus(Period.years(-2013)), is(equalTo(expectedEnd)));
+The error it gives is:
+org.joda.time.IllegalFieldValueException: Value 0 for year is not supported
+However, I never provided "0" for the year myself. I thought it was the job of the framework to skip over non-existent year 0 for me to return 1 BC?	src/main/java	src/test/java
+7		src/main/java/org/joda/time/format/DateTimeFormatter.java内public int parseInto(ReadWritableInstant instant, String text, int position)	6bf5bba0f77f3023dec23a1de6e0a8cef8585f61	1adb1e69863dcd1ff282692bf1452c422528eeb9	21	https://github.com/JodaOrg/joda-time/issues/21	DateTimeFormat.parseInto sometimes miscalculates year (2.2)	There appears to be a bug in the fix to http://sourceforge.net/p/joda-time/bugs/148 (which I also reported).
+The following code (which can be added to org.joda.time.format.TestDateTimeFormatter) breaks, because the input mutable date time's millis appear to be mishandled and the year for the parse is changed to 1999:
+    public void testParseInto_monthDay_feb29_startOfYear() {
+        DateTimeFormatter f = DateTimeFormat.forPattern("M d").withLocale(Locale.UK);
+        MutableDateTime result = new MutableDateTime(2000, 1, 1, 0, 0, 0, 0, NEWYORK);
+        assertEquals(4, f.parseInto(result, "2 29", 0));
+        assertEquals(new MutableDateTime(2000, 2, 29, 0, 0, 0, 0, NEWYORK), result);
+    }	src/main/java	src/test/java
+8		src/main/java/org/joda/time/DateTimeZone.java内public static DateTimeZone forOffsetHoursMinutes(int hoursOffset, int minutesOffset)	96f586cb8dac7eee62e9be519a3eab125c47bb23	362ed1787724cda3ded37de2b0aa0f13adf0a66e	42	https://github.com/JodaOrg/joda-time/issues/42	DateTimeZone.forOffsetHoursMinutes cannot handle negative offset < 1 hour	DateTimeZone.forOffsetHoursMinutes(h,m) cannot handle negative offset < 1 hour like -0:30 due to argument range checking. I used forOffsetMillis() instead.
+This should probably be mentioned in the documentation or negative minutes be accepted.	src/main/java	src/test/java
+9		src/main/java/org/joda/time/DateTimeZone.java内public static DateTimeZone forOffsetHoursMinutes(int hoursOffset, int minutesOffset)外src/main/java/org/joda/time/DateTimeZone.java内public static DateTimeZone forOffsetMillis(int millisOffset)	08a3a0b969b1e5d1d06489a698fe9c9b69e2f2d9	96f586cb8dac7eee62e9be519a3eab125c47bb23	43	https://github.com/JodaOrg/joda-time/issues/43	Ensure there is a max/min valid offset	DateTimeZone does not apply a max/min value for an offset. However the parse method is limited to 23:59. Make 23:59:59.999 the maximum.	src/main/java	src/test/java
+10		src/main/java/org/joda/time/base/BaseSingleFieldPeriod.java内protected static int between(ReadablePartial start, ReadablePartial end, ReadablePeriod zeroInstance)	efce99164f0bbd2c70e7f9d71884a32473e02c6d	3a413d7844c22dc6ddd50bf5d0d55ff3589e47ac	22	https://github.com/JodaOrg/joda-time/issues/22	Days#daysBetween throw exception for MonthDay with 29 February	final LocalDate january12012 = new LocalDate(2012, 1,1);
+final LocalDate february292012 = new LocalDate(2012, 2, 29);
+// OK
+assertEquals(59, Days.daysBetween(january12012, february292012).getDays());
+final MonthDay january1 = new MonthDay(1,1);
+final MonthDay february29 = new MonthDay(2, 29);
+// FAIL
+assertEquals(59, Days.daysBetween(january1, february29).getDays());
+org.joda.time.IllegalFieldValueException: Value 29 for dayOfMonth must be in the range [1,28]
+at org.joda.time.field.FieldUtils.verifyValueBounds(FieldUtils.java:217)
+at org.joda.time.field.PreciseDurationDateTimeField.set(PreciseDurationDateTimeField.java:78)
+at org.joda.time.chrono.BaseChronology.set(BaseChronology.java:240)
+at org.joda.time.base.BaseSingleFieldPeriod.between(BaseSingleFieldPeriod.java:103)
+at org.joda.time.Days.daysBetween(Days.java:141)
+Is there a way to avoid this happening? I understand fiddling around with the leap year, you're bound to get issues.
+Thanks!	src/main/java	src/test/java
+11	en, non-methods + newlyAddedMethods	src/main/java/org/joda/time/tz/ZoneInfoCompiler.java内noLeftCurtyIn1stLine:	6d5104753470c130336e319a64009c0553b29c96	57eb4cbb9044771cd46a9eee0c62016618930226	18	https://github.com/JodaOrg/joda-time/issues/18	NPE in DateTimeZoneBuilder	When a DateTimeZone is build with duplicate-named 'recurring saving time' in a first thread, all goes Ok: a warning message is generated and an identifier is automatically generated in PrecalculatedZone.create(). When a second thread does the same, an NPE is generated in ZoneInfoCompiler.verbose().
+The cause is that the cVerbose ThreadLocal is incorrectly initialized in ZoneInfoCompiler:
+   static {
+        cVerbose.set(Boolean.FALSE);
+    }
+...will initialize cVerbose only for the first thread and not for the subsequent ones. The NPE is caused by the autoboxing in:
+   public static boolean verbose() {
+        return cVerbose.get();
+    }
+A better approach could be to remove the initialization and test for null:
+public static boolean verbose(){
+    Boolean verbose = cVerbose.get();
+    return (verbose != null) ? verbose : false;
+}
+Here follows a test case:
+    @Test
+    public void testDateTimeZoneBuilder() throws Exception {
+        getTestDataTimeZoneBuilder().toDateTimeZone("TestDTZ1", true);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getTestDataTimeZoneBuilder().toDateTimeZone("TestDTZ2", true);
+            }
+        });
+        t.start();
+        t.join();
+    }
+    private DateTimeZoneBuilder getTestDataTimeZoneBuilder() {
+         return new DateTimeZoneBuilder()
+         .addCutover(1601, 'w', 1, 1, 1, false, 7200000)
+         .setStandardOffset(3600000)
+         .addRecurringSavings("", 3600000, 1601, Integer.MAX_VALUE, 'w', 3, -1, 1, false, 7200000)
+         .addRecurringSavings("", 0, 1601, Integer.MAX_VALUE, 'w', 10, -1, 1, false, 10800000);
+    }	src/main/java	src/test/java
+12		src/main/java/org/joda/time/LocalDateTime.java内public static LocalDateTime fromCalendarFields(Calendar calendar)外src/main/java/org/joda/time/LocalDateTime.java内public static LocalDateTime fromDateFields(Date date)外src/main/java/org/joda/time/LocalDate.java内public static LocalDate fromCalendarFields(Calendar calendar)外src/main/java/org/joda/time/LocalDate.java内public static LocalDate fromDateFields(Date date)	f2f9c8146446eff341dc7b66b5237b56d50abec0	77a6b3a44da7ae4af62e88b4b27eeefec2d768c2	8	https://github.com/JodaOrg/joda-time/issues/8	Check Calendar.ERA in LocalDate.fromCalendarFields		src/main/java	src/test/java
+13		src/main/java/org/joda/time/format/PeriodFormatterBuilder.java内public int calculatePrintedLength(ReadablePeriod period, Locale locale)外src/main/java/org/joda/time/format/PeriodFormatterBuilder.java内public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale)外src/main/java/org/joda/time/format/PeriodFormatterBuilder.java内public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale)	6a1b24c5d85270b57706b3f7ca0b4c05a752b3ff	5d08a1cdbfa6ce86a0baf637493c464e91e91968	160	https://sourceforge.net/p/joda-time/bugs/160	Negative millis display incorrectly in Period.toString	This code:
+import org.joda.time.Duration;
+import org.joda.time.Period;
+public class A {
+public static void main(String[] args) {
+System.out.println("new Duration(-1000).getMillis() = " + new Duration(-1000).getMillis());
+System.out.println("new Duration(-1000).toString() = " + new Duration(-1000).toString());
+System.out.println("new Period(-1000).getSeconds() = " + new Period(-1000).getSeconds());
+System.out.println("new Period(-1000).toString() = " + new Period(-1000).toString());
+System.out.println("new Duration(-100).getMillis() = " + new Duration(-100).getMillis());
+System.out.println("new Duration(-100).toString() = " + new Duration(-100).toString());
+System.out.println("new Period(-100).getMillis() = " + new Period(-100).getMillis());
+System.out.println("new Period(-100).toString() = " + new Period(-100).toString());
+}
+}
+Produces output:
+new Duration(-1000).getMillis() = -1000
+new Duration(-1000).toString() = PT-1S
+new Period(-1000).getSeconds() = -1
+new Period(-1000).toString() = PT-1S
+new Duration(-100).getMillis() = -100
+new Duration(-100).toString() = PT-0.100S
+new Period(-100).getMillis() = -100
+new Period(-100).toString() = PT0.100S
+The last line should produce "PT-0.100S" instead of "PT0.100S".	src/main/java	src/test/java
+14		src/main/java/org/joda/time/chrono/BasicMonthOfYearDateTimeField.java内public long add(long instant, long months)	cc3262ff42e41f3b1f64290262704da3895fbe85	2ea856328ed5710537778d755a5ff52a6831a2ee	151	https://sourceforge.net/p/joda-time/bugs/151	Unable to add days to a MonthDay set to the ISO leap date	It's not possible to add days to a MonthDay set to the ISO leap date (February 29th). This is even more bizarre given the exact error message thrown.
+Sample snippet:
+final MonthDay isoLeap = new MonthDay(DateTimeConstants.FEBRUARY, 29, ISOChronology.getInstanceUTC());
+System.out.println(isoLeap);
+System.out.println(isoLeap.plusDays(2));
+Which generates the following combined console output and stack trace:
+--02-29
+Exception in thread "main" org.joda.time.IllegalFieldValueException: Value 29 for dayOfMonth must be in the range [1,28]
+at org.joda.time.field.FieldUtils.verifyValueBounds(FieldUtils.java:215)
+at org.joda.time.field.PreciseDurationDateTimeField.set(PreciseDurationDateTimeField.java:78)
+at org.joda.time.chrono.BasicMonthOfYearDateTimeField.add(BasicMonthOfYearDateTimeField.java:212)
+at org.joda.time.field.BaseDateTimeField.add(BaseDateTimeField.java:324)
+at org.joda.time.MonthDay.withFieldAdded(MonthDay.java:519)
+at org.joda.time.MonthDay.minusDays(MonthDay.java:672)
+at ext.site.time.chrono.Main.m7(Main.java:191)
+at ext.site.time.chrono.Main.main(Main.java:27)
+The follwing method calls and parameters also generate the same or related error:
+isoLeap.plusMonths(1);
+isoLeap.plusMonths(-1);
+isoLeap.minusMonths(1);
+isoLeap.minusMonths(-1);
+isoLeap.minusDays(-1);
+However, the following methods work:
+isoLeap.minusDays(1);
+isoLeap.plusDays(-1);
+Performing operations on dates around the ISO leap date react as if it exists, ie:
+System.out.println(isoLeap.minusDays(1).plusDays(2));
+Prints out '--03-01' as expected.	src/main/java	src/test/java
+15		src/main/java/org/joda/time/field/FieldUtils.java内public static int safeMultiply(int val1, int val2)	383354adc669c3fd8d9e6fe3a25403df993e11e7	0cefc4c212e92e5dccdfa658785c419483317558	147	https://sourceforge.net/p/joda-time/bugs/147	possibly a bug in org.joda.time.field.FieldUtils.safeMultipl	It seems to me that as currently written in joda-time-2.1.jar
+org.joda.time.field.FieldUtils.safeMultiply(long val1, int scalar)
+doesn't detect the overflow if the long val1 == Long.MIN_VALUE and the int scalar == -1.
+The attached file demonstrates what I think is the bug and suggests a patch.
+I looked at the Joda Time bugs list in SourceForge but couldn't see anything that looked relevant: my apologies if I've missed something, or if I'm making a mistake with this bug report.
+Colin Bartlett	src/main/java	src/test/java
+16		src/main/java/org/joda/time/format/DateTimeFormatter.java内public int parseInto(ReadWritableInstant instant, String text, int position)	dba7c37ea3d83b32779d3bb13cb184aedf761a8a	706513d59425e7a9dc6bdb972f25b03b02e48558	148	https://sourceforge.net/p/joda-time/bugs/148	DateTimeFormatter.parseInto broken when no year in format	In Joda Time 2.0, the default year was set to 2000 so that Feb 29 could be parsed correctly. However, parseInto now overwrites the given instant's year with 2000 (or whatever iDefaultYear is set to). The correct behavior would seem to be to use the given instant's year instead of iDefaultYear.
+This does mean that Feb 29 might not be parseable if the instant's year is not a leap year, but in this case the caller asked for that in a sense.	src/main/java	src/test/java
+17		src/main/java/org/joda/time/DateTimeZone.java内public long adjustOffset(long instant, boolean earlierOrLater)	cdeacf09e33ddbaf75a4563d7bc62063f50972b1	a8913f5ad5dfde59263c981c9e9eb28e43fd2e00	141	https://sourceforge.net/p/joda-time/bugs/141	Bug on withLaterOffsetAtOverlap method	The method withLaterOffsetAtOverlap created to workaround the issue 3192457 seems to not be working at all.
+I won´t write many info about the problem to solve because the issue 3192457 have this info indeed.
+But If something is unclear I can answer on the comments.
+Problem demonstration:
+TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
+DateTimeZone.setDefault( DateTimeZone.forID("America/Sao_Paulo") );
+    DateTime dtch;
+    {
+        dtch = new DateTime(2012,2,25,5,5,5,5).millisOfDay().withMaximumValue();
+        System.out.println( dtch ); // prints: 2012-02-25T23:59:59.999-02:00 //Were are at the first 23:** of the day.
+        //At this point dtch have the -03:00 offset
+    }
+    {
+        dtch = dtch.plus(60001);
+        System.out.println( dtch ); // prints: 2012-02-25T23:01:00.000-03:00 //Were are at the first minute of the second 23:** of the day. Ok its correct
+        //At this point dtch have the -03:00 offset
+    }
+    {
+        dtch = dtch.withEarlierOffsetAtOverlap();
+        System.out.println( dtch ); // prints: 2012-02-25T23:01:00.000-02:00 //Were are at the first minute of the first 23:** of the day. Ok its correct
+        //At this point dtch have the -02:00 offset ( because we called withEarlierOffsetAtOverlap() ) // This method is working perfectly
+    }       
+    {
+        dtch = dtch.withLaterOffsetAtOverlap();
+        System.out.println( dtch ); // prints: 2012-02-25T23:01:00.000-02:00 //Were are at the first minute of the first 23:** of the day. 
+        // Here is the problem we should have a -03:00 offset here since we called withLaterOffsetAtOverlap() expecting to change to the second 23:** of the day
+    }
+On the last two brackets we can see that withLaterOffsetAtOverlap is not undoing withEarlierOffsetAtOverlap as it should ( and not even working at all )	src/main/java	src/test/java
+18		src/main/java/org/joda/time/chrono/GJChronology.java内public long getDateTimeMillis(int year, int monthOfYear, int dayOfMonth, int millisOfDay)	e16eb72a29d06ce36030b109156bea3244273fb8	b609d7d66d180f2eb537b27f5d605d0596e096ce	130	https://sourceforge.net/p/joda-time/bugs/130	GJChronology rejects valid Julian dates	Example:
+DateTime jdt = new DateTime(1500, 2, 29, 0, 0, 0, 0, JulianChronology.getInstanceUTC()); // Valid.
+DateTime gjdt = new DateTime(1500, 2, 29, 0, 0, 0, 0, GJChronology.getInstanceUTC()); // Invalid.
+The 2nd statement fails with "org.joda.time.IllegalFieldValueException: Value 29 for dayOfMonth must be in the range [1,28]".
+Given that I left the cutover date at the default (October 15, 1582), isn't 1500/02/29 a valid date in the GJChronology?	src/main/java	src/test/java
+19		src/main/java/org/joda/time/DateTimeZone.java内public int getOffsetFromLocal(long instantLocal)	a92450e88df85d6b7a0fa53517da46286c24f53f	82c5e4f9550e4df36e07b66f35f7c3e9d7eb5eba	124	https://sourceforge.net/p/joda-time/bugs/124	Inconsistent interpretation of ambiguous time during DST	The inconsistency appears for timezone Europe/London.
+Consider the following code
+…
+DateTime britishDate = new DateTime(2011, 10, 30, 1, 59, 0, 0, DateTimeZone.forID("Europe/London"));
+DateTime norwDate = new DateTime(2011, 10, 30, 2, 59, 0, 0, DateTimeZone.forID("Europe/Oslo"));
+DateTime finnishDate = new DateTime(2011, 10, 30, 3, 59, 0, 0, DateTimeZone.forID("Europe/Helsinki"));
+    System.out.println(britishDate);
+    System.out.println(norwDate);
+    System.out.println(finnishDate);
+…
+These three DateTime objects should all represent the same moment in time even if they are ambiguous. And using jodatime 1.6.2 this is the case. The code produces the following output:
+2011-10-30T01:59:00.000Z
+2011-10-30T02:59:00.000+01:00
+2011-10-30T03:59:00.000+02:00
+Using jodatime 2.0 however, the output is:
+2011-10-30T01:59:00.000Z
+2011-10-30T02:59:00.000+02:00
+2011-10-30T03:59:00.000+03:00
+which IMO is wrong for Europe/London. Correct output should have been 
+2011-10-30T01:59:00.000+01:00
+The release notes for 2.0 states that: 
+"Now, it always returns the earlier instant (summer time) during an overlap. …"	src/main/java	src/test/java
+20		src/main/java/org/joda/time/format/DateTimeFormatterBuilder.java内public int estimateParsedLength()	17a60c9a7253d9a8fce6afe2ce46bea78ac53ebe	a92450e88df85d6b7a0fa53517da46286c24f53f	126	https://sourceforge.net/p/joda-time/bugs/126	Errors creating/parsing dates with specific time zones.	Consider the following test code using Joda 2.0
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import java.util.Set;
+public class JodaDateTimeZoneTester {
+private static DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss.SSS ZZZ");
+private static int numTimeZonesTested = 0;
+private static int numTimeZonesPassed = 0;
+private static int numTimeZonesFailed = 0;
+private static int numTimeZonesException = 0;
+private static String convertDateTimeToFormattedString(DateTime dateTime) {
+    return formatter.print(dateTime);
+}
+private static DateTime parseStringToDateTime(String formattedDateTime) {
+    return formatter.parseDateTime(formattedDateTime);
+}
+private static void testDateTimeFormatter(DateTime dateTime, String timeZone) {
+    numTimeZonesTested++;
+    final String dateTimeZoneId = dateTime.getZone().getID();
+    if (!timeZone.equals(dateTimeZoneId)) {
+        numTimeZonesFailed++;
+        System.out.println(timeZone + " failed to construct into the proper date time zone - constructed time zone = " + dateTimeZoneId);
+        return;
+    }
+    try {
+        DateTime convertedDateTime = parseStringToDateTime(convertDateTimeToFormattedString(dateTime));
+        if (dateTime.equals(convertedDateTime)) {
+            numTimeZonesPassed++;
+            //System.out.println(dateTime.getZone().getID() + " passed.");
+        } else {
+            numTimeZonesFailed++;
+            System.out.println("Formatter failed for time zone ID: " + dateTimeZoneId + "    converted it to: " + convertedDateTime.getZone().getID());
+        }
+    } catch (IllegalArgumentException iae) {
+        numTimeZonesException++;
+        System.out.println("Formatter threw exception for time zone id: " + dateTimeZoneId);
+    }
+}
+public static void main(String[] args) {
+    Set<String> timeZones = DateTimeZone.getAvailableIDs();  for (String timeZone : timeZones) {
+        testDateTimeFormatter(DateTime.now().withZone(DateTimeZone.forID(timeZone)), timeZone);
+    }
+    System.out.println();
+    System.out.println("Number of Time Zones tested: " + numTimeZonesTested);
+    System.out.println("Number passed:     " + numTimeZonesPassed);
+    System.out.println("Number failed:     " + numTimeZonesFailed);
+    System.out.println("Number exceptions: " + numTimeZonesException);
+    System.out.println();
+}
+}
+The results are out of 572 time zones 130 fail and 30 throw exceptions.
+The failures are the most interesting. When I query DateTimeZone to get its time zone ids I will get a time zone like America/Atka. When I take that id and create a date time with it its time zone id is America/Adak. It is like there are multiple list of time zones in Joda time and they are out of sync.
+Source code is attached.	src/main/java	src/test/java
+21		src/main/java/org/joda/time/tz/DefaultNameProvider.java内public String getName(Locale locale, String id, String nameKey)	c5a5190e19c062405ae4825c36e2172ae64202fb	0973b46039c4db0be3a969d36c220dee1e1fb4da	122	https://sourceforge.net/p/joda-time/bugs/122	DateTimeZone.getName(long,Locale) fails since Java 6	The short names of the time zones are localized since Java 6. Therefore DateTimeZone.getName(long,Locale) fails for a locale where the short name differs from English. NameProvider.getNameSet(Locale, String, String) builds a cache based on the localized short names, but will use the English short name for the lookup. Therefore the localized names of the time zones are no longer found.
+Attached a test case with an additional main function to run it directly, that tries to get the localized time zone name for "Europe/Berlin" with German locale. See different console output for Java 5 (or less) and 6 (or higher).	src/main/java	src/test/java
+22		src/main/java/org/joda/time/base/BasePeriod.java内protected BasePeriod(long duration)	14dedcbc04682c1b1b6c5ebe91bc930b79eeb572	57c8aaf94b95323c295dcfec5f40f181846164e7	113	https://sourceforge.net/p/joda-time/bugs/113	Duration.toPeriod with fixed time zones.	I have a question concerning the conversion of a Duration to Period. I'm not sure if this is a bug, or if there is a different way to do this.
+The basis of the problem, is that using Duration.toPeriod() uses the chronology of the default time zone to do the conversion. This can cause different results from a timezone with DST and one without. This can be reproduced easily with this test.
+//set default time zone with this argument -Duser.timezone="GMT"
+public void testForJodaForum()
+{
+    System.out.println("Timezone: " + DateTimeZone.getDefault());
+    //Duration of more than 24 hours
+    Duration aDuration = new Duration(DateTimeConstants.MILLIS_PER_HOUR * 30 + DateTimeConstants.MILLIS_PER_MINUTE * 50
+        + DateTimeConstants.MILLIS_PER_SECOND * 14);
+    System.out.println("Duration before: " + aDuration);
+    Period period = aDuration.toPeriod();
+    System.out.println("Period after: " + period);        
+}
+A fixed time zone produces this output
+Timezone: Etc/GMT
+Duration before: PT111014S
+Period after: P1DT6H50M14S
+A DST time zone produces this output
+Timezone: America/Chicago
+Duration before: PT111014S
+Period after: PT30H50M14S
+In the joda code, Duration.toPeriod() uses a period constructor that takes the chronology, but null is passed in, so the chronology of the default time zone is used, which leads to this behavior.
+The javadoc of toPeriod() states that only precise fields of hours, minutes, seconds, and millis will be converted. But for a fixed timezone, days and weeks are also precise, which is stated in the javadoc for toPeriod(Chronology chrono). In our app, we need consistent behavior regardless of the default time zone, which is to have all the extra hours put into the hours bucket. Since Duration is supposed to be a 'time zone independent' length of time, I don't think we should have to do any chronology manipulation to get this to work.
+Any help is appreciated.
+Thanks,
+Cameron	src/main/java	src/test/java
+23		src/main/java/org/joda/time/DateTimeZone.java内private static synchronized String getConvertedId(String id)外src/main/java/org/joda/time/DateTimeZone.java内private static synchronized String getConvertedId(String id)	bfd37a81dd7f4c9e35340f3de0b5b1e8066a141b	14dedcbc04682c1b1b6c5ebe91bc930b79eeb572	112	https://sourceforge.net/p/joda-time/bugs/112	 Incorrect mapping of the MET time zone	This timezone is mapped to Asia/Tehran in DateTimeZone. It should be middle europena time.
+I know that this bug has been raised before (Incorrect mapping of the MET time zone - ID: 2012274), and there is a comment stating that you won't break backward compatibility to fix this bug.
+I disagree that this is a backward compatibility argument
+No matter how you look at it, it is a bug.
+You could very well state that ALL bugs won't be fixed, because of backward compatibility.
+I request again that this bug be fixed.	src/main/java	src/test/java
+24		src/main/java/org/joda/time/format/DateTimeParserBucket.java内public long computeMillis(boolean resetFields, String text)	c3bec2cd4eea2e87c650f5ad9b537dddb804778c	d50efdf75a8daeced88d79b168f68d189fb87e13	107	https://sourceforge.net/p/joda-time/bugs/107	Incorrect date parsed when week and month used together	I have following code snippet :
+    DateTimeFormatter dtf = DateTimeFormat.forPattern("xxxxMM'w'ww");
+DateTime dt = dtf.parseDateTime("201101w01");       
+System.out.println(dt);
+It should print 2011-01-03 but it is printing 2010-01-04. 
+Please let me know if I am doing something wrong here.	src/main/java	src/test/java
+25		src/main/java/org/joda/time/DateTimeZone.java内public int getOffsetFromLocal(long instantLocal)	c7a581e55fc988bd90fa4bb1b0acece5181b7c5f	552be4b677ec30a34d04d234395ba1a8c7beaacf	90	https://sourceforge.net/p/joda-time/bugs/90	DateTimeZone.getOffsetFromLocal error during DST transition	This may be a failure of my understanding, but the comments in DateTimeZone.getOffsetFromLocal lead me to believe that if an ambiguous local time is given, the offset corresponding to the later of the two possible UTC instants will be returned - i.e. the greater offset.
+This doesn't appear to tally with my experience. In fall 2009, America/Los_Angeles changed from -7 to -8 at 2am wall time on November 11. Thus 2am became 1am - so 1:30am is ambiguous. I would therefore expect that constructing a DateTime for November 11th, 1:30am would give an instant corresponding with the later value (i.e. 9:30am UTC). This appears not to be the case:
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+public class TzTest {
+public static void main(String[] args) throws Exception {
+DateTimeZone zone = DateTimeZone.forID("America/Los_Angeles");
+DateTime when1 = new DateTime(2009, 11, 1, 0, 30, 0, 0, zone);
+DateTime when2 = new DateTime(2009, 11, 1, 1, 30, 0, 0, zone);
+DateTime when3 = new DateTime(2009, 11, 1, 2, 30, 0, 0, zone);
+System.out.println(when1);
+System.out.println(when2);
+System.out.println(when3);
+}
+}
+Results:
+2009-11-01T00:30:00.000-07:00 // Correct
+2009-11-01T01:30:00.000-07:00 // Should be -08:00
+2009-11-01T02:30:00.000-08:00 // Correct	src/main/java	src/test/java
+26		src/main/java/org/joda/time/chrono/ZonedChronology.java内public long add(long instant, int value)外src/main/java/org/joda/time/chrono/ZonedChronology.java内public long add(long instant, long value)外src/main/java/org/joda/time/chrono/ZonedChronology.java内public long addWrapField(long instant, int value)外src/main/java/org/joda/time/chrono/ZonedChronology.java内public long set(long instant, String text, Locale locale)外src/main/java/org/joda/time/chrono/ZonedChronology.java内public long roundFloor(long instant)外src/main/java/org/joda/time/chrono/ZonedChronology.java内public long roundCeiling(long instant)	218a7fe91a685e089ab8fd7700806f7a6083f18d	c7a581e55fc988bd90fa4bb1b0acece5181b7c5f	60	https://sourceforge.net/p/joda-time/bugs/60	withHourOfDay() sets hour inconsistantly on DST transition.	When the hour of day is set to the ambiguous hour on the daylight to
+standard time transition in a given time zone the result is inconsistent for different time zones. Shoul the hour be set to the
+daylight hour or the standard hour for all time zones? I can't find anything
+that documents this behavior.
+My test code below returns different results for different time zones.
+/
+Verify Joda converts the hour of day the same for regions north and
+south of the equator on the DST daylight to standard time transition.
+*/
+@Test
+public void jodaTest ()
+{
+Chronology chronUTC =
+GregorianChronology.getInstance(DateTimeZone.UTC);
+DateTime usCentralStandardInUTC = new DateTime(2008, 11, 2, 7, 0, 0,
+0, chronUTC);
+DateTime usCentralDaylightInUTC = new DateTime(2008, 11, 2, 6, 0, 0,
+0, chronUTC);
+Chronology chronUSCentral =
+GregorianChronology.getInstance(DateTimeZone.forID("US/Central"));
+Assert.assertTrue("Should be standard time",
+chronUSCentral.getZone().isStandardOffset(
+usCentralStandardInUTC.getMillis()));
+Assert.assertFalse("Should be daylight time",
+chronUSCentral.getZone().isStandardOffset(
+usCentralDaylightInUTC.getMillis()));
+DateTime usCentralStandardInUSCentral =
+usCentralStandardInUTC.toDateTime(chronUSCentral);
+DateTime usCentralDaylightInUSCentral =
+usCentralDaylightInUTC.toDateTime(chronUSCentral);
+assertEquals(1, usCentralStandardInUSCentral.getHourOfDay());
+assertEquals(usCentralStandardInUSCentral.getHourOfDay(),
+usCentralDaylightInUSCentral.getHourOfDay());
+Assert.assertTrue(usCentralStandardInUSCentral.getMillis() !=
+usCentralDaylightInUSCentral.getMillis());
+DateTime australiaNSWStandardInUTC = new DateTime(2008, 4, 5, 16, 0,
+0, 0, chronUTC);
+DateTime australiaNSWDaylightInUTC = new DateTime(2008, 4, 5, 15, 0,
+0, 0, chronUTC);
+Chronology chronAusNSW =
+GregorianChronology.getInstance(DateTimeZone.forID("Australia/NSW"));
+Assert.assertTrue("Should be standard time",
+chronAusNSW.getZone().isStandardOffset(
+australiaNSWStandardInUTC.getMillis()));
+Assert.assertFalse("Should be daylight time",
+chronAusNSW.getZone().isStandardOffset(
+australiaNSWDaylightInUTC.getMillis()));
+DateTime australiaNSWStandardInAustraliaNSW =
+australiaNSWStandardInUTC.toDateTime(chronAusNSW);
+DateTime australiaNSWDaylightInAusraliaNSW =
+australiaNSWDaylightInUTC.toDateTime(chronAusNSW);
+assertEquals(2, australiaNSWStandardInAustraliaNSW.getHourOfDay());
+assertEquals(australiaNSWStandardInAustraliaNSW.getHourOfDay(),
+australiaNSWDaylightInAusraliaNSW.getHourOfDay());
+Assert.assertTrue(australiaNSWStandardInAustraliaNSW.getMillis() !=
+australiaNSWDaylightInAusraliaNSW.getMillis());
+// Verify that setting the hour of day on the DST boundary results
+in a daylight time for
+// both time zones.
+assertEquals(usCentralDaylightInUSCentral,
+usCentralStandardInUSCentral.withHourOfDay(1));
+assertEquals(australiaNSWDaylightInAusraliaNSW,
+australiaNSWStandardInAustraliaNSW.withHourOfDay(2));
+}
+The very last assertion fails on the Australia time zone cutover.
+java.lang.AssertionError: expected:<2008-04-06T02:00:00.000+11:00> but
+was:<2008-04-06T02:00:00.000+10:00>	src/main/java	src/test/java
+27		src/main/java/org/joda/time/format/PeriodFormatterBuilder.java内private static PeriodFormatter toFormatter(List<Object> elementPairs, boolean notPrinter, boolean notParser)	d090b642dc04259286d3478cfa49f1da2f0755e6	e0559c503f65641b9546c37e7c84c866caf37e66	64	https://sourceforge.net/p/joda-time/bugs/64	Different behaviour of PeriodFormatter	PeriodFormatter pfmt2 = pfmtbuilder2.append(ISOPeriodFormat.standard() ).toFormatter(); is not the same as 
+PeriodFormatterBuilder pfmtbuilder1 = new PeriodFormatterBuilder()
+.appendLiteral("P")
+.appendYears()
+.appendSuffix("Y")
+.appendMonths()
+.appendSuffix("M")
+.appendWeeks()
+.appendSuffix("W")
+.appendDays()
+.appendSuffix("D")
+.appendSeparatorIfFieldsAfter("T")
+.appendHours()
+.appendSuffix("H")
+.appendMinutes()
+.appendSuffix("M")
+.appendSecondsWithOptionalMillis()
+.appendSuffix("S");
+which is copied from ISOPeriodFormat.standard() method	src/main/java	src/test/java

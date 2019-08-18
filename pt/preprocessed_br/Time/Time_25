@@ -1,0 +1,20 @@
+date time zone get offset local error dst transit 
+mai failur understand comment date time zone get offset local lead believ ambigu local time given offset correspond later two possibl utc instant return e greater offset 
+appear talli experi fall america lo angel chang wall time novemb thu becam ambigu would therefor expect construct date time novemb th would give instant correspond later valu e utc appear case 
+import org joda time date time 
+import org joda time date time zone 
+public class tz test 
+public static void main string arg throw except 
+date time zone zone date time zone id america lo angel 
+date time new date time zone 
+date time new date time zone 
+date time new date time zone 
+system println 
+system println 
+system println 
+
+
+result 
+correct 
+
+correct 

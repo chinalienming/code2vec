@@ -1,0 +1,2 @@
+better 'this' type checking
+/** @constructor */  function F() {}  F.prototype.bar = function() { this.baz(); };  F.prototype.baz = function() { };    /** @constructor */  function G() {}  G.prototype.bar = F.prototype.bar;    We should notice that "F.prototype.bar" and "G.prototype.bar" have different "this" types, and emit a warning.

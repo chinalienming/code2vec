@@ -1,0 +1,2 @@
+Variable names prefixed with MSG_ cause error with advanced optimizations
+Variables named something with MSG_ seem to cause problems with the module system, even if no modules are used in the code.    $ echo "var MSG_foo='bar'" | closure --compilation_level ADVANCED_OPTIMIZATIONS  stdin:1: ERROR - message not initialized using goog.getMsg  var MSG_foo='bar'      ^    It works fine with msg_foo, MSG2_foo, etc.

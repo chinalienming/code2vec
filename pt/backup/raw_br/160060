@@ -1,0 +1,6 @@
+ Bug 160060 - Research use of JSR 170 for Context Container
+ Research the use of JSR 170 as the standard or implementing the Context Container.  Investigate use of Apache JackRabbit and Eclipse Apogee.
+
+Some of the issues to be addressed include:
+* Migrating current RepositoryDescriptors to conform to JSR 170
+* Consistent use of terminology

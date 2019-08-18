@@ -1,0 +1,5 @@
+org\gajnineteen\analyzer\impl\CompoundWordsAnalyzerTest.class
+org\gajnineteen\Process\impl\LRProcessTest.class
+org\gajnineteen\analyzer\impl\StopWordsAnalyzerTest.class
+org\gajnineteen\AppTest.class
+org\gajnineteen\analyzer\impl\PorterStemmberAnalyzerTest.class

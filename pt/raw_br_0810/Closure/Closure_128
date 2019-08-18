@@ -1,0 +1,2 @@
+The compiler quotes the "0" keys in object literals
+What steps will reproduce the problem? 1. Compile alert({0:0, 1:1});    What is the expected output?  alert({0:0, 1:1});    What do you see instead?  alert({"0":0, 1:1});    What version of the product are you using? On what operating system? Latest version on Goobuntu.  

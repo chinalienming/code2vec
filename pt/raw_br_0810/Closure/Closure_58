@@ -1,0 +1,2 @@
+Online CC bug: report java error.
+What steps will reproduce the problem? 1. open http://closure-compiler.appspot.com/  2. input js code:    function keys(obj) {      var a = [], i = 0;      for (a[i++] in obj)        ;      return a;    }  3. press [compile] button.    What is the expected output? What do you see instead? Except OK. See java error.    What version of the product are you using? On what operating system? Online CC version.  

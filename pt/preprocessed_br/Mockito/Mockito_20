@@ -1,0 +1,65 @@
+allow conveni spy abstract class 
+post googl code ask submit github 
+mockito easi us test need provid can valu certain method 
+get harder can valu suffici 
+exampl fake trivial logic 
+interfac user account 
+list string get email 
+void add email string email 
+method 
+
+mock domain entiti object tediou manual program get email add email return make sure two method logic consist get email return email ad 
+exampl callback style api 
+interfac account servic 
+void get account string id async callback user account callback 
+
+stub account servic easi requir us answer answer api static type safe 
+servic get account eq id async callback class answer new answer void 
+async callback user account callback async callback user account get argument 
+
+
+exampl uninterest paramet 
+interfac account rpc servic 
+futur account get account rpc context context string id 
+
+none test care context object uninterest paramet impos framework 
+account rpc servic directli mock test would us repetit mention uninterest paramet like 
+servic get account rpc context class eq id return 
+paramet requir wrap eq 
+propos 
+propos ad support abstract class mockito make easier deal test like 
+exampl 
+abstract class fake user account implement user account 
+privat final list string email new arrai list 
+overrid public void add email string email 
+email add email 
+
+overrid list string get email 
+return immut list copi email 
+
+
+fake privat fake user account user account mockito instanti abstract class 
+exampl 
+abstract class mock account servic implement account servic 
+overrid public void get account string id async callback user account callback 
+callback success get account id 
+
+abstract user account get account string id 
+
+fake privat mock account servic servic 
+
+servic get account id return account 
+exampl 
+abstract class mock account rpc servic implement account rpc servic 
+overrid futur account get account rpc context context string id 
+check null context common saniti test repeat test 
+return get account id 
+
+abstract futur account get account string id 
+
+fake privat mock account rpc servic servic 
+servic get account id return 
+work place intern implement default answer support abstract class found support abstract class help us avoid overus mock us fake situat like get cleaner test code 
+integr core mockito gotcha implement like privat final method fake 
+idea sound okai give try volunt submit patch 
+thank 

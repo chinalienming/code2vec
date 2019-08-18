@@ -1,0 +1,5 @@
+use @InjectMocks for final fields
+I'm trying to upgrade the mockito version that we're using (1.8.5) to a newer version but there is a problem with @InjectMocks which since 1.9.0 doesn't inject into final field anymore.
+Were there any reasons for that feature to be removed?
+Is there another way to achieve this without polutting our class with useless (outside testing context) constructors / accessors?
+Is there a possibility to get that feature back?

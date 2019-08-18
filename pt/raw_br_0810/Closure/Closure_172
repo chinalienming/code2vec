@@ -1,0 +1,2 @@
+Type of prototype property incorrectly inferred to string
+What steps will reproduce the problem? 1. Compile the following code:    /** @param {Object} a */  function f(a) {    a.prototype = '__proto';  }    /** @param {Object} a */  function g(a) {    a.prototype = function(){};  }    What is the expected output? What do you see instead?   Should type check. Instead, gives error:    WARNING - assignment to property prototype of Object  found   : function (): undefined  required: string    a.prototype = function(){};    ^  

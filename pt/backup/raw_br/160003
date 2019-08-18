@@ -1,0 +1,6 @@
+Bug 160003 - Build Settings tab contents the wrong colour with 'XP Style Windows and Buttons' 
+To recreate, set Windows XP to 'XP style' Windows and Buttons'.  Then for a C/C++ managed build project navigate from Properties -> C/C++ Build -> Build Settings and observe that the background for option text-labels in the boxes 'Build Command', 'Build Macro Usage' and 'Internal Builder' are the wrong colour.
+
+A fix for this is to remove statements redifining background and foreground colour for the relevant elements.
+
+Screenshot and patch to follow.

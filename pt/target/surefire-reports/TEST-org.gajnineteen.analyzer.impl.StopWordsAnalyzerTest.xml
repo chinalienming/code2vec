@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.gajnineteen.analyzer.impl.StopWordsAnalyzerTest" time="0.001" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="sun.desktop" value="windows"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.class.path" value="D:\work\GraduateRepos\preprocessing-technology\target\test-classes;D:\work\GraduateRepos\preprocessing-technology\target\classes;D:\DevelopeInstall\MvnRepository\junit\junit\4.11\junit-4.11.jar;D:\DevelopeInstall\MvnRepository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\DevelopeInstall\MvnRepository\args4j\args4j\2.33\args4j-2.33.jar;D:\DevelopeInstall\MvnRepository\org\apache\lucene\lucene-analyzers-common\7.5.0\lucene-analyzers-common-7.5.0.jar;D:\DevelopeInstall\MvnRepository\org\apache\lucene\lucene-core\7.5.0\lucene-core-7.5.0.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_73\jre\bin"/>
+    <property name="sun.java.command" value="C:\Users\Magister\AppData\Local\Temp\surefire6551231702090626643\surefirebooter1706696506244809161.jar C:\Users\Magister\AppData\Local\Temp\surefire6551231702090626643 2019-01-03T18-58-30_251-jvmRun1 surefire8775011174189781378tmp surefire_01668554255701430613tmp"/>
+    <property name="surefire.test.class.path" value="D:\work\GraduateRepos\preprocessing-technology\target\test-classes;D:\work\GraduateRepos\preprocessing-technology\target\classes;D:\DevelopeInstall\MvnRepository\junit\junit\4.11\junit-4.11.jar;D:\DevelopeInstall\MvnRepository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\DevelopeInstall\MvnRepository\args4j\args4j\2.33\args4j-2.33.jar;D:\DevelopeInstall\MvnRepository\org\apache\lucene\lucene-analyzers-common\7.5.0\lucene-analyzers-common-7.5.0.jar;D:\DevelopeInstall\MvnRepository\org\apache\lucene\lucene-core\7.5.0\lucene-core-7.5.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\Magister"/>
+    <property name="user.language" value="zh"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_73\jre"/>
+    <property name="basedir" value="D:\work\GraduateRepos\preprocessing-technology"/>
+    <property name="file.separator" value="\"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="C:\Users\Magister\AppData\Local\Temp\surefire6551231702090626643\surefirebooter1706696506244809161.jar"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_73\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_73\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_73\jre\classes"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="1.8.0_73-b02"/>
+    <property name="user.name" value="Magister"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_73\jre\lib\endorsed"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="GBK"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="D:\DevelopeInstall\MvnRepository"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\Magister\AppData\Local\Temp\"/>
+    <property name="java.version" value="1.8.0_73"/>
+    <property name="user.dir" value="D:\work\GraduateRepos\preprocessing-technology"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_73\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Windows\System32;D:\SoftwareInstall\CTEX\UserData\miktex\bin;D:\SoftwareInstall\CTEX\MiKTeX\miktex\bin;D:\SoftwareInstall\CTEX\CTeX\ctex\bin;D:\SoftwareInstall\CTEX\CTeX\cct\bin;D:\SoftwareInstall\CTEX\CTeX\ty\bin;D:\SoftwareInstall\CTEX\Ghostscript\gs9.04\bin;D:\SoftwareInstall\CTEX\GSview\gsview;D:\SoftwareInstall\CTEX\WinEdt;D:\DevelopeInstall\Git\bin;C:\Program Files\Java\jdk1.8.0_73\jre\bin;C:\Program Files\Java\jdk1.8.0_73\bin;D:\DevelopeInstall\apache-maven-3.5.2\bin;C:\Program Files\Java\jdk1.8.0_73;C:\Program Files\Python36;C:\Program Files\Python36\Scripts;C:\Program Files\GO\\bin;D:\DevelopeEnv\GoSpace;C:\Program Files\Python27;C:\Program Files\Python27\Scripts;D:\DevelopeInstall\Microsoft VS Code\bin;D:\DevelopeInstall\nodejs\;C:\Users\Magister\AppData\Local\Microsoft\WindowsApps;D:\DevelopeEnv\GoSpace\bin;D:\DevelopeEnv\nodejs-dev\Lib;;."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="25.73-b02"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_73\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="52.0"/>
+  </properties>
+  <testcase name="testAnalysis" classname="org.gajnineteen.analyzer.impl.StopWordsAnalyzerTest" time="0"/>
+</testsuite>

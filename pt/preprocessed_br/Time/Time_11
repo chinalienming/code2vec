@@ -1,0 +1,35 @@
+npe date time zone builder 
+date time zone build duplic name recur save time first thread goe ok warn messag gener identifi automat gener precalcul zone creat second thread npe gener zone info compil verbos 
+caus c verbos thread local incorrectli initi zone info compil 
+static 
+c verbos set boolean fals 
+
+initi c verbos first thread subsequ on npe caus autobox 
+public static boolean verbos 
+return c verbos get 
+
+better approach could remov initi test null 
+public static boolean verbos 
+boolean verbos c verbos get 
+return verbos null verbos fals 
+
+follow test case 
+test 
+public void test date time zone builder throw except 
+get test data time zone builder date time zone test dtz true 
+thread new thread new runnabl 
+overrid 
+public void run 
+get test data time zone builder date time zone test dtz true 
+
+
+start 
+join 
+
+privat date time zone builder get test data time zone builder 
+return new date time zone builder 
+add cutov w fals 
+set standard offset 
+add recur save integ max valu w fals 
+add recur save integ max valu w fals 
+

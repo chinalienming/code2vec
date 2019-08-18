@@ -1,0 +1,2 @@
+bug implicit namespac across modul 
+three modul latter two depend root modul modul goog provid app modul b goog provid app foo bar b modul c goog provid app foo bar c compil simpl optim mode follow code produc modul var app app foo bar app foo modul b app foo bar b modul c app foo bar c result runtim error modul app foo bar assign app foo patch fix regress test avail http codereview appspot com 

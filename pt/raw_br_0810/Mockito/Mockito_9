@@ -1,0 +1,2 @@
+Problem spying on abstract classes
+There's a problem with spying on abstract classes when the real implementation calls out to the abstract method. More details: #121 As discussed previously, changing CALLS_REAL_METHOD to delegate to default answer when the method is abstract. This makes spy() more useful.

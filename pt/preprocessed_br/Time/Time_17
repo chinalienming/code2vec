@@ -1,0 +1,29 @@
+bug later offset overlap method 
+method later offset overlap creat workaround issu seem work 
+write mani info problem solv issu info inde 
+someth unclear answer comment 
+problem demonstr 
+time zone set default time zone get time zone america sao paulo 
+date time zone set default date time zone id america sao paulo 
+date time dtch 
+
+dtch new date time milli dai maximum valu 
+system println dtch print first dai 
+point dtch offset 
+
+
+dtch dtch plu 
+system println dtch print first minut second dai ok correct 
+point dtch offset 
+
+
+dtch dtch earlier offset overlap 
+system println dtch print first minut first dai ok correct 
+point dtch offset call earlier offset overlap method work perfectli 
+
+
+dtch dtch later offset overlap 
+system println dtch print first minut first dai 
+problem offset sinc call later offset overlap expect chang second dai 
+
+last two bracket see later offset overlap undo earlier offset overlap even work 

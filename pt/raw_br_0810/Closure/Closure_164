@@ -1,0 +1,2 @@
+{function(number, string)} should not be assignable to {function(number)}
+Consider the following snippet. I don't think the "second call" should compile. As a side note: it would be great if none of the compiled in some pseudo-strict compile mode.    /** @param {function(string,number):boolean} param */  function func(param) {}    /** @type {function(string,number,boolean):boolean} */  function paramFunc1() {}    /** @type {function(string):boolean} */  function paramFunc2() {}    // first call  func(paramFunc1);    // second call  func(paramFunc2);  

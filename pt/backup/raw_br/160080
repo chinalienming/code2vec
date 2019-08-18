@@ -1,0 +1,13 @@
+Bug 160080 - ConcurrentModificationException thrown when analyzing logs
+Build:
+tptp.sdk-TPTP-4.3.0-200610060112
+
+Steps to reproduce
+1) Import 3 or more logs of different type
+2) Import SDBs for each log type.
+3) Open one of the logs in the log view, right click on of its records, and click "Analyze Settings". Choose "Xpath Log Analyzer" for analysis engine, and choose the SDB of the corresponding type with the log.
+4) Click "Analyze Selected". 
+5) If problem does not manifest itself, and analysis succeeds, repeat step 3 and 4 with another log and SDB, and usually around the 3rd and 4th attempt the problem manifests itself. 
+
+The problem manifests itself with the following message, and the analysis fails:
+"An error occured while attempting to analyze the log records. Make sure that the right combination of analysis engine and database is selected. Please see the workspace log file for more details"

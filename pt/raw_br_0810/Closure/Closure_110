@@ -1,0 +1,2 @@
+Allow @private top-level functions in goog.scope
+What steps will reproduce the problem? 1. goog.scope(function() {      /* @private */      function test() {}  });    2. The code above gives an error "The local variable test is in a goog.scope and is not an alias."    What is the expected output?    The code above should compile, and function test() be referenceable only from inside the file in question. If I replace "function test" with "var test = function", the code compiles.

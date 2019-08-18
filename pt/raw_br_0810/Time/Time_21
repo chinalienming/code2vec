@@ -1,0 +1,3 @@
+DateTimeZone.getName(long,Locale) fails since Java 6
+The short names of the time zones are localized since Java 6. Therefore DateTimeZone.getName(long,Locale) fails for a locale where the short name differs from English. NameProvider.getNameSet(Locale, String, String) builds a cache based on the localized short names, but will use the English short name for the lookup. Therefore the localized names of the time zones are no longer found.
+Attached a test case with an additional main function to run it directly, that tries to get the localized time zone name for "Europe/Berlin" with German locale. See different console output for Java 5 (or less) and 6 (or higher).

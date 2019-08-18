@@ -1,0 +1,26 @@
+Negative millis display incorrectly in Period.toString
+This code:
+import org.joda.time.Duration;
+import org.joda.time.Period;
+public class A {
+public static void main(String[] args) {
+System.out.println("new Duration(-1000).getMillis() = " + new Duration(-1000).getMillis());
+System.out.println("new Duration(-1000).toString() = " + new Duration(-1000).toString());
+System.out.println("new Period(-1000).getSeconds() = " + new Period(-1000).getSeconds());
+System.out.println("new Period(-1000).toString() = " + new Period(-1000).toString());
+System.out.println("new Duration(-100).getMillis() = " + new Duration(-100).getMillis());
+System.out.println("new Duration(-100).toString() = " + new Duration(-100).toString());
+System.out.println("new Period(-100).getMillis() = " + new Period(-100).getMillis());
+System.out.println("new Period(-100).toString() = " + new Period(-100).toString());
+}
+}
+Produces output:
+new Duration(-1000).getMillis() = -1000
+new Duration(-1000).toString() = PT-1S
+new Period(-1000).getSeconds() = -1
+new Period(-1000).toString() = PT-1S
+new Duration(-100).getMillis() = -100
+new Duration(-100).toString() = PT-0.100S
+new Period(-100).getMillis() = -100
+new Period(-100).toString() = PT0.100S
+The last line should produce "PT-0.100S" instead of "PT0.100S".

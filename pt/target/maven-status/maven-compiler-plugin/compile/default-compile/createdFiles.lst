@@ -1,0 +1,10 @@
+org\gajnineteen\analyzer\TextAnalyzer.class
+org\gajnineteen\analyzer\impl\CompoundWordsAnalyzer$1.class
+org\gajnineteen\analyzer\impl\PorterStemmberAnalyzer.class
+org\gajnineteen\analyzer\impl\CompoundWordsAnalyzer.class
+org\gajnineteen\analyzer\impl\CompoundWordsSaver.class
+org\gajnineteen\processor\Processor.class
+org\gajnineteen\processor\impl\LRProcessor.class
+org\gajnineteen\analyzer\impl\PorterStemmberAnalyzer$1.class
+org\gajnineteen\analyzer\impl\StopWordsAnalyzer.class
+org\gajnineteen\App.class

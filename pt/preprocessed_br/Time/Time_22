@@ -1,0 +1,27 @@
+durat period fix time zone 
+question concern convers durat period sure bug differ wai 
+basi problem us durat period us chronolog default time zone convers caus differ result timezon dst on without reproduc easili test 
+set default time zone argument duser timezon gmt 
+public void test joda forum 
+
+system println timezon date time zone get default 
+durat hour 
+durat durat new durat date time constant milli per hour date time constant milli per minut 
+date time constant milli per second 
+system println durat durat 
+period period durat period 
+system println period period 
+
+fix time zone produc output 
+timezon etc gmt 
+durat pt 
+period p dt h 
+dst time zone produc output 
+timezon america chicago 
+durat pt 
+period pt h 
+joda code durat period us period constructor take chronolog null pass chronolog default time zone us lead behavior 
+javadoc period state precis field hour minut second milli convert fix timezon dai week also precis state javadoc period chronolog chrono app need consist behavior regardless default time zone extra hour put hour bucket sinc durat suppos time zone independ length time think chronolog manipul get work 
+help appreci 
+thank 
+cameron 

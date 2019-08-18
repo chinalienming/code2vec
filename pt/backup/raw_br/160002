@@ -1,0 +1,21 @@
+Bug 160002 - [content assist] Import statements do not get added automatically 
+Create a new class with the Class wizard.  Begin to declare a variable of some type, eg, javax.swing.JFrame.  Let the auto-assist guide you to the final JFrame selection.
+
+When I do this, I am left with, for example, the following:
+
+public class Foo {
+    javax.swing.JFrame
+}
+
+In previous releases of Eclipse [3.1 series), performing this procedure would yield:
+
+import javax.swing.JFrame;
+
+public class Foo {
+    JFrame
+}
+
+This is with a fresh install of 3.2.1.  Changing the following properties seemed to have no effect:
+Window->Preferences->Java->Editor->Code Assist:Insert single proposals automatically, Add import instead of qualified name.
+
+This has been replicated on Linux and Windows platforms.

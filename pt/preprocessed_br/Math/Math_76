@@ -1,0 +1,2 @@
+na n singular valu svd 
+follow jython code start code org apach common math linear import alist arrai drow real matrix alist decomp singular valu decomposit impl print decomp get singular valu end code print arrai nan last singular valu someth close sinc matrix rank defici us result get solver solv system end bunch na ns solut assum would get back least squar solut svd implement requir matrix full rank would expect except thrown constructor on method 

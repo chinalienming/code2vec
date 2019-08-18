@@ -1,0 +1,4 @@
+Bug 160005 - Add protection about misbehaving container initializer 
+I20061003
+
+As shown in bug 159989, the PDE container is misbehaving and it is not initializing the container it should initialize. As a consequence, an infinite loop occurs beacause we keep asking the container initialize to initialize the container.

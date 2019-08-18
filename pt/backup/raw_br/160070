@@ -1,0 +1,26 @@
+Bug 160070 - PM - Feedback on PM discipline provided
+Feedback was provided before release 0.9, but not incorporated yet. 
+
+
+Just a few, minor emphasis comments..
+
+(1)  Purpose of the Discipline
+The purpose of this discipline is to: 
+Keep the team focused on continually delivering tested software product for stakeholder evaluation 
+Help prioritize the sequence of work 
+Help create an effective working environment to maximize team productivity 
+Keep stakeholders and the team informed on project progress 
+Provide a framework to manage project risk and continually adapt to change 
+
+These are all correct, and reasons to employ the discipline.  However, it does not emphasize a principle objective in the use of the term “management” in “project management” 
+
+Suggest that we include something like: 
+
+To provide leadership and direction in the optimization of the use of staff, funding, and other resources to achieve the goals stated for this work effort
+
+General Comment
+
+The project management discipline exists – also – to collect feedback as to progress against goals / targets / milestones, to analyze that feedback, and to adjust the evolution of the project as it is ongoing.   We should get this point into the overview.
+
+
+Reviewer: Mike Hanfor (IBM)

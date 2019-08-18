@@ -1,0 +1,6 @@
+gjchronolog reject valid julian date 
+exampl 
+date time jdt new date time julian chronolog get instanc utc valid 
+date time gjdt new date time gjchronolog get instanc utc invalid 
+nd statement fail org joda time illeg field valu except valu dai month must rang 
+given left cutov date default octob valid date gjchronolog 

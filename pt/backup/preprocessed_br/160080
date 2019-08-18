@@ -1,0 +1,13 @@
+bug concurr modif except thrown analyz log ConcurrentModificationException 
+build 
+tptp sdk tptp 
+
+step reproduc 
+import log differ type 
+import sdb log type 
+open on log log view right click record click analyz set choos xpath log analyz analysi engin choos sdb correspond type log 
+click analyz select 
+problem manifest analysi succe repeat step anoth log sdb usual around rd th attempt problem manifest 
+
+problem manifest follow messag analysi fail 
+error occur attempt analyz log record make sure right combin analysi engin databas select pleas see workspac log file detail 

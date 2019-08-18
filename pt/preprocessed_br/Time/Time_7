@@ -1,0 +1,9 @@
+date time format pars sometim miscalcul year 
+appear bug fix http sourceforg net p joda time bug also report 
+follow code ad org joda time format test date time formatt break input mutabl date time milli appear mishandl year pars chang 
+public void test pars month dai feb start year 
+date time formatt f date time format pattern local local uk 
+mutabl date time result new mutabl date time newyork 
+assert equal f pars result 
+assert equal new mutabl date time newyork result 
+

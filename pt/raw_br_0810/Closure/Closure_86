@@ -1,0 +1,2 @@
+side-effects analysis incorrectly removing function calls with side effects
+Sample Code:  ---  /** @constructor */  function Foo() {    var self = this;    window.setTimeout(function() {      window.location = self.location;    }, 0);  }    Foo.prototype.setLocation = function(loc) {    this.location = loc;  };    (new Foo()).setLocation('http://www.google.com/');  ---    The setLocation call will get removed in advanced mode.

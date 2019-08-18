@@ -1,0 +1,2 @@
+arguments is moved to another scope
+Using ADVANCED_OPTIMIZATIONS with CompilerOptions.collapsePropertiesOnExternTypes = true a script I used broke, it was something like:    function () {    return function () {      var arg = arguments;      setTimeout(function() { alert(args); }, 0);    }  }    Unfortunately it was rewritten to:    function () {    return function () {      setTimeout(function() { alert(arguments); }, 0);    }  }    arguments should not be collapsed.

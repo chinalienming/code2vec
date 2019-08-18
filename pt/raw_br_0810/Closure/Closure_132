@@ -1,0 +1,2 @@
+if statement
+What steps will reproduce the problem? INPUT:  if( es[--esi][ es[esi+1] ] === 1)  {   es[esi] = 0;  }  else  {   es[esi] = 1;  }  OUTPUT:    es[esi] = 1 === es[--esi][es[esi + 1]] ? 0 : 1;    BUT MUST BE  es[--esi] = 1 === es[esi][es[esi + 1]] ? 0 : 1;    Im using latest version on windows  

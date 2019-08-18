@@ -1,0 +1,2 @@
+Add option to turn off string escaping
+What steps will reproduce the problem?   1. I'm having large files with strings (patterns for hyphenation, see http://code.google.com/p/hyphenator/) and no-ASCII-characters.  2. Minifying with closure compiler makes them bigger      ru.js (orig): 41'216 Bytes      ru.js (orig, gzip): 17'124 Bytes      ru.js (mini): 110'770 Bytes      ru.js (mini, gzip): 18'860 Bytes    What is the expected output?  I'd like to be able to turn OFF the string escaping mechanism.    Thanks

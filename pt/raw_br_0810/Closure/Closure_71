@@ -1,0 +1,2 @@
+no warnings when @private prop is redeclared on subclass
+What steps will reproduce the problem? /** @constructor */ function Foo() { /** @private */ this.x_ = 3; }    then, in a separate file:  /** @constructor    * @extends {Foo} */ function SubFoo() { /** @private */ this.x_ = 3; }    then, compile with --jscomp_error=visibility    Expected: You should get an error.  Actual: No error.    You get an error as appropriate if the second @private annotation is removed.    

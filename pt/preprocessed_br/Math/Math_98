@@ -1,0 +1,2 @@
+real matrix impl oper get result vector dimens wrong 
+org apach common math linear real matrix impl oper tri creat result vector alwai length input vector result runtim except matrix non squar alwai yield incorrect result matrix non squar correct behaviour would cours creat vector length row dimens matrix thu line real matrix impl java read doubl new doubl n row instead doubl new doubl v length 

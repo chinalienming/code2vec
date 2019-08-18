@@ -1,0 +1,2 @@
+Overly aggressive comma removal
+When I compile the following code using simple optimizations,   function Test(n) {    var i = 0;    return typeof n !== "undefined" ? (i = n.length) : (n = "foo"), i  }  var dummy = "6chars";  console && console.log( Test(dummy) );    I get this:  function Test(a) {    return 0  }  var dummy = "6chars";  console && console.log(Test(dummy));    Which provides a different result than the original code.  

@@ -1,0 +1,2 @@
+division by zero wrongly throws JSC_DIVIDE_BY_0_ERROR
+What steps will reproduce the problem?   unaliased division by zero `1/0`    What is the expected output? What do you see instead?   I expect minified code, but an error is thrown instead.    What version of the product are you using? On what operating system?   appspot    Please provide any additional information below.   Division by zero is a perfectly sane operation in ECMAScript. See 11.5.2 [0] of the ECMAScript 5 specification. Aliased division by zero `(n=1)/0` is permitted.    [0] http://es5.github.com/#x11.5.2

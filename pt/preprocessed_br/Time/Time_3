@@ -1,0 +1,11 @@
+add dai chang valu mutabl date time 
+upon dst transit summer winter time zone ad amount zero dai mutabl date time object chang valu object 
+code 
+final mutabl date time mdt new mutabl date time date time zone id europ berlin 
+system println start date mdt mdt instant get milli 
+mdt add hour 
+system println add hour mdt mdt instant get milli 
+mdt add hour 
+system println add hour mdt mdt instant get milli 
+mdt add dai 
+system println add dai mdt mdt instant get milli 

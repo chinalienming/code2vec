@@ -1,0 +1,2 @@
+Auto-identify void functions
+function f() {  }    alert(f());    should emit a warning

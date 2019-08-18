@@ -1,0 +1,17 @@
+bug vm crash hit backspac button select tablerow 
+szenario 
+multi page editor tab text field combo tabl MultiPageEditorTab textField 
+
+descript 
+select tablerow tabl 
+push backspac button keyboard 
+vm crash see hs err pid log 
+
+notic 
+problem occur everi comput try reproduc crash 
+reproduc fujitsu siemen notebook 
+happen sometim dell desktop pc see hardwar env errorlog 
+
+quit complex multi page editor sever nest composit till final widget text combo tabl ad MultiPageEditor 
+
+us formtoolkit 

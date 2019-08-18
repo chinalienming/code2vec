@@ -1,0 +1,2 @@
+Prototype method incorrectly removed
+// ==ClosureCompiler==  // @compilation_level ADVANCED_OPTIMIZATIONS  // @output_file_name default.js  // @formatting pretty_print  // ==/ClosureCompiler==    /** @const */  var foo = {};  foo.bar = {    'bar1': function() { console.log('bar1'); }  }    /** @constructor */  function foobar() {}  foobar.prototype = foo.bar;    foo.foobar = new foobar;    console.log(foo.foobar['bar1']);

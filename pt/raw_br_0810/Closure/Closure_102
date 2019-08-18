@@ -1,0 +1,2 @@
+compiler assumes that 'arguments' can be shadowed
+The code:  function name() {     var arguments = Array.prototype.slice.call(arguments, 0);  }    gets compiled to:  function name(){ var c=Array.prototype.slice.call(c,0); }    Thanks to tescosquirrel for the report.

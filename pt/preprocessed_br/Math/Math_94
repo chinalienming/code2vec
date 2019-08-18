@@ -1,0 +1,2 @@
+math util gcd u v fail u v contain high power 
+test begin math util gcd u v argument equal zero fail u v contain high enough power product overflow zero assert equal math util gcd fix replac test start math util gcd u v u v 

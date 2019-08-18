@@ -1,0 +1,15 @@
+Exception when stubbing more than once with when...thenThrow
+If I create a mock and stub a method so it throws an exception and do that twice the first exception will be thrown upon invoking the second stub instruction.
+Example:
+@Test
+public void testThrowException() {
+    Object o = Mockito.mock(Object.class);
+    // test behavior with Runtimeexception
+    Mockito.when(o.toString()).thenThrow(RuntimeException.class);
+    // ...
+    // test behavior with another exception
+    // this throws a RuntimeException
+    Mockito.when(o.toString()).thenThrow(IllegalArgumentException.class);
+    // ...
+}
+I can work around this if I do it the other way around with doThrow...when. But I lose type safety then. Can you fix this?

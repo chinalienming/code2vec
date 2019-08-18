@@ -1,0 +1,17 @@
+Bug 160001 - VM crash when hitting backspace button on a selected tablerow 
+Szenario:
+We have a MultiPageEditorTab with textField, combos and tables in it.
+
+Description:
+1.) Select a tablerow on in a table.
+2.) Push the "Backspace" button on the keyboard.
+3.) The VM crashes. See the hs_err_pid6764.log.
+
+We noticed:
+1.) This problem occurs not on every Computer where we try to reproduce this crash.
+- is not reproduceable on Fujitsu Siemens Notebooks
+- it happens sometimes on our Dell Desktop Pc ( see hardware-env in the errorlog )
+
+2.) It is quite a complex MultiPageEditor where we have several nested composites, till finally the widgets ( text, combo, tables ) are added.
+
+3.) We are using formtoolkit

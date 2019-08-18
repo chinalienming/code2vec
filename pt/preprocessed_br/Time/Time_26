@@ -1,0 +1,68 @@
+hour dai set hour inconsistantli dst transit 
+hour dai set ambigu hour daylight 
+standard time transit given time zone result inconsist differ time zone shoul hour set 
+daylight hour standard hour time zone find anyth 
+document behavior 
+test code return differ result differ time zone 
+
+verifi joda convert hour dai region north 
+south equat dst daylight standard time transit 
+
+test 
+public void joda test 
+
+chronolog chron utc 
+gregorian chronolog get instanc date time zone utc 
+date time us central standard utc new date time 
+chron utc 
+date time us central daylight utc new date time 
+chron utc 
+chronolog chron uscentr 
+gregorian chronolog get instanc date time zone id us central 
+assert assert true standard time 
+chron uscentr get zone standard offset 
+us central standard utc get milli 
+assert assert fals daylight time 
+chron uscentr get zone standard offset 
+us central daylight utc get milli 
+date time us central standard uscentr 
+us central standard utc date time chron uscentr 
+date time us central daylight uscentr 
+us central daylight utc date time chron uscentr 
+assert equal us central standard uscentr get hour dai 
+assert equal us central standard uscentr get hour dai 
+us central daylight uscentr get hour dai 
+assert assert true us central standard uscentr get milli 
+us central daylight uscentr get milli 
+date time australia nswstandard utc new date time 
+chron utc 
+date time australia nswdaylight utc new date time 
+chron utc 
+chronolog chron au nsw 
+gregorian chronolog get instanc date time zone id australia nsw 
+assert assert true standard time 
+chron au nsw get zone standard offset 
+australia nswstandard utc get milli 
+assert assert fals daylight time 
+chron au nsw get zone standard offset 
+australia nswdaylight utc get milli 
+date time australia nswstandard australia nsw 
+australia nswstandard utc date time chron au nsw 
+date time australia nswdaylight ausralia nsw 
+australia nswdaylight utc date time chron au nsw 
+assert equal australia nswstandard australia nsw get hour dai 
+assert equal australia nswstandard australia nsw get hour dai 
+australia nswdaylight ausralia nsw get hour dai 
+assert assert true australia nswstandard australia nsw get milli 
+australia nswdaylight ausralia nsw get milli 
+verifi set hour dai dst boundari result 
+daylight time 
+time zone 
+assert equal us central daylight uscentr 
+us central standard uscentr hour dai 
+assert equal australia nswdaylight ausralia nsw 
+australia nswstandard australia nsw hour dai 
+
+last assert fail australia time zone cutov 
+java lang assert error expect 
+

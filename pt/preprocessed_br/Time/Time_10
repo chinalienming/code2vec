@@ -1,0 +1,17 @@
+dai dai throw except month dai februari 
+final local date januari new local date 
+final local date februari new local date 
+ok 
+assert equal dai dai januari februari get dai 
+final month dai januari new month dai 
+final month dai februari new month dai 
+fail 
+assert equal dai dai januari februari get dai 
+org joda time illeg field valu except valu dai month must rang 
+org joda time field field util verifi valu bound field util java 
+org joda time field precis durat date time field set precis durat date time field java 
+org joda time chrono base chronolog set base chronolog java 
+org joda time base base singl field period base singl field period java 
+org joda time dai dai dai java 
+wai avoid happen understand fiddl around leap year bound get issu 
+thank 

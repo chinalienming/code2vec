@@ -1,0 +1,2 @@
+-0.0 becomes 0 even in whitespace mode
+Affects dart: http://code.google.com/p/dart/issues/detail?id=146

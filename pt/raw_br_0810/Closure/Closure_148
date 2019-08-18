@@ -1,0 +1,2 @@
+CSS3 'writingMode' not recognised in advanced mode
+element.style.writingMode was defined in CSS3 but later dropped. However it is supported by IE7 (possibly earlier). It's a useful way to achieve vertical text in IE.    Closure Compiler will change references of element.style.writingMode to element.style.a, breaking implementation.    I've attached a patch adding this to the IE css properties.    Cheers,  Jake.

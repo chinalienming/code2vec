@@ -1,0 +1,2 @@
+Converts string properties into numbers in literal object definitions
+What steps will reproduce the problem? 1. Minimize the following script:    var lit = {"0102":"Zero One Zero Two"};  alert(lit["0102"]);    What is the expected output? What do you see instead?   Expected:  var lit={"0102":"Zero One Zero Two"};alert(lit["0102"]);    Actual:  var lit={102:"Zero One Zero Two"};alert(lit["0102"]);    What version of the product are you using? On what operating system?   r1459    Please provide any additional information below. 

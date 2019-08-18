@@ -1,0 +1,12 @@
+Bug 160004 - Highlighted tabs in main window not updating with other window data. 
+When (in Windows XP at any rate) the colour settings for focussed window bars are changed the tabs in the main work area do not work.  To recreate:
+
+1- Use the Control Panel -> Display -> Appearance -> Advanced dialog to alter the colour of the top bar for focussed windows to a garish colour.
+
+2 - Start an instance of Eclipse.
+
+3- Alter the colour using the same procedure to a more reasonable one.
+
+Observe that whilst the top-bar for the Eclipse application a whole has changed colour to reflect the OS defaults the focussed menu bar has not.
+
+Screenshot to follow

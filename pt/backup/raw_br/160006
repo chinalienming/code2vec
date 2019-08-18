@@ -1,0 +1,5 @@
+Bug 160006 - Chkpii error in latest build
+eclipse/plugins/org.eclipse.jdt.debug_3.2.100.N20061006-0010/jdimodel_jar/org/eclipse/jdt/internal/debug/core/model/
+  JDIDebugModelMessages.properties  JAVA2-PRB   918   Found 1 single quote in text handled by Java MessageFormat class. Double this quote.  Line: 88
+                                                918   Found 1 single quote in text handled by Java MessageFormat class. Double this quote.  Line: 94
+                                                918   Found 1 single quote in text handled by Java MessageFormat class. Double this quote.  Line: 104

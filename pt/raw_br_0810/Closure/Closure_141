@@ -1,0 +1,2 @@
+The side effects of function1||function2 are not calculated
+What steps will reproduce the problem? 1. Compile (Math.sin||Math.cos)(0)    What is the expected output? What do you see instead? Empty output.    What version of the product are you using? On what operating system? The closure-compiler web service at r114.    Please provide any additional information below. As a result of this issue goog.now() is considered to have side effects.

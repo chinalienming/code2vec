@@ -1,0 +1,2 @@
+JSCompiler does not recursively resolve typedefs
+goog.provide('a.b.c');    goog.scope(function() {  var b = a.b;  var c = b.c;    /** @typedef {string} */  c.MyType;    /** @param {c.MyType} x The variable. */  c.myFunc = function(x) {};    });    results in a compiler error.    given that JSCompiler *does* recursively resolve other names, this appears to be a bug rather than an intended limitation.  

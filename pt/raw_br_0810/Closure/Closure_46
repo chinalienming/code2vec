@@ -1,0 +1,2 @@
+ClassCastException during TypeCheck pass
+What steps will reproduce the problem? 1. Compile code that has a ProxyObjectType that references a RecordType.  For example, we have a NamedType in a typedef that references a RecordType.    Please provide any additional information below.   Patch attached.  Is this the correct fix?  

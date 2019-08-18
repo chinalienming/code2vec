@@ -1,0 +1,2 @@
+Assigning object literals to obj.prototype in a immediately executed function not recognized.
+/** @constructor */  function foo() {}  (function() {    foo.prototype = {      alert: function() {        alert("hello world");      }    };  })()  window.console.log(foo.prototype.alert); //undefined property warning  

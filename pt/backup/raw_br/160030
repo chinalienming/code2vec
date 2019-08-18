@@ -1,0 +1,4 @@
+Bug 160030 - [breakpoints] Dynamic breakpoint hardware options
+Dynamic breakpoint property pages based on information retrieved from the target
+
+Effort Estimate: 15, 1

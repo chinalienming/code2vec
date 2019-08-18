@@ -1,0 +1,2 @@
+bogus 'missing return' warning
+The following sample code compiles with "Missing return statement. Function expected to return boolean." warning:    /**   * @return {boolean}   */  function fb(a)  {      try      {          alert(a);      // Some method, which can throw          if (a > 0)              return false;      }      finally      {          a = 5;      }            return true;  }

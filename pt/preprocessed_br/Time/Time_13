@@ -1,0 +1,26 @@
+neg milli displai incorrectli period string 
+code 
+import org joda time durat 
+import org joda time period 
+public class 
+public static void main string arg 
+system println new durat get milli new durat get milli 
+system println new durat string new durat string 
+system println new period get second new period get second 
+system println new period string new period string 
+system println new durat get milli new durat get milli 
+system println new durat string new durat string 
+system println new period get milli new period get milli 
+system println new period string new period string 
+
+
+produc output 
+new durat get milli 
+new durat string pt 
+new period get second 
+new period string pt 
+new durat get milli 
+new durat string pt 
+new period get milli 
+new period string pt 
+last line produc pt instead pt 

@@ -1,0 +1,4 @@
+Bug 160040 - [debug view] Process object support for I/O redirection.
+Implement a process object that supports redirecting standard console input/output.  
+
+Effort Estimate: 3, 1

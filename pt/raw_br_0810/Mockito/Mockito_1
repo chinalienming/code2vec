@@ -1,0 +1,2 @@
+ArgumentCaptor no longer working for varargs
+Why does upgrading Mockito from 1.9.5 to 1.10.8 break this Captor?

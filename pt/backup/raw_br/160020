@@ -1,0 +1,12 @@
+Bug 160020 - [usability][dstore] Connecting a windows "Running" dstore server is too difficult
+In the "Connecting to a remote Windows server" help page 
+says "Use of the server daemon on Windows systems is not recommended.".
+So I tried to run the server directly. 
+
+The instruction says: "You will then have to enter this port number in the port property for the Files subsystem for your connection in the Remote System Explorer (see Connecting below)."
+
+Below it says: "To check your port number, right-click your connection or subsystem from the Remote Systems view and select Properties. Click Subsystem to see the relevant information. If your port is "0," then your Remote System Explorer communications server will pick any free port on the Windows server. If you specified a port number when starting the server, you need to enter it here, for example, to work with a firewall."
+
+This simply makes no sense to me. Maybe I'm to stupid, but I was not able to get it running with a server.
+ 
+ See: http://scharf.gr/eclipse/rse/problems/windows-server/

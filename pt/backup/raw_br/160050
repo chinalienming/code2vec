@@ -1,0 +1,2 @@
+Bug 160050 - [Text] There should be simple API support for setting intraline spacing in Draw2D text
+Currently there is no way to set the line spacing for a block of text short of a somewhat elaborate construction that involves subclassing AbstractFlowBorder, TextLayout and TextFragmentBox.

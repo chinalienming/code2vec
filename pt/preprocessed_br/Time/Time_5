@@ -1,0 +1,17 @@
+none standard period type without year throw except 
+hi 
+tri get period month week follow code 
+period p new period new date time start date get time new date time end date get time period type field new durat field type durat field type month durat field type week normal standard period type field new durat field type durat field type month durat field type week 
+return p get month 
+throw follow except 
+e android runtim java lang unsupport oper except field support 
+e android runtim org joda time period type set index field period type java 
+e android runtim org joda time period year period java 
+e android runtim org joda time period normal standard period java 
+even remov year compon year remov throw except 
+work 
+period p new period new date time start date get time new date time end date get time period type standard normal standard period type standard 
+return p get month 
+fail 
+period p new period new date time start date get time new date time end date get time period type standard year remov normal standard period type standard year remov 
+return p get month 

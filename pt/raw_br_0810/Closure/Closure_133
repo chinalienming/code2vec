@@ -1,0 +1,2 @@
+Exception when parsing erroneous jsdoc: /**@return {@code foo} bar   *    baz. */
+The following causes an exception in JSDocInfoParser.    /**    * @return {@code foo} bar    *    baz. */  var x;        Fix to follow.

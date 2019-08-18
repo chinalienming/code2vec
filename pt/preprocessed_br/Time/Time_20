@@ -1,0 +1,56 @@
+error creat pars date specif time zone 
+consid follow test code us joda 
+import org joda time date time 
+import org joda time date time zone 
+import org joda time format date time format 
+import org joda time format date time formatt 
+import java util set 
+public class joda date time zone tester 
+privat static date time formatt formatt date time format pattern mm dd yyyi hh mm ss sss zzz 
+privat static int num time zone test 
+privat static int num time zone pass 
+privat static int num time zone fail 
+privat static int num time zone except 
+privat static string convert date time format string date time date time 
+return formatt print date time 
+
+privat static date time pars string date time string format date time 
+return formatt pars date time format date time 
+
+privat static void test date time formatt date time date time string time zone 
+num time zone test 
+final string date time zone id date time get zone get id 
+time zone equal date time zone id 
+num time zone fail 
+system println time zone fail construct proper date time zone construct time zone date time zone id 
+return 
+
+try 
+date time convert date time pars string date time convert date time format string date time 
+date time equal convert date time 
+num time zone pass 
+system println date time get zone get id pass 
+els 
+num time zone fail 
+system println formatt fail time zone id date time zone id convert convert date time get zone get id 
+
+catch illeg argument except iae 
+num time zone except 
+system println formatt threw except time zone id date time zone id 
+
+
+public static void main string arg 
+set string time zone date time zone get avail id string time zone time zone 
+test date time formatt date time zone date time zone id time zone time zone 
+
+system println 
+system println number time zone test num time zone test 
+system println number pass num time zone pass 
+system println number fail num time zone fail 
+system println number except num time zone except 
+system println 
+
+
+result time zone fail throw except 
+failur interest queri date time zone get time zone id get time zone like america atka take id creat date time time zone id america adak like multipl list time zone joda time sync 
+sourc code attach 

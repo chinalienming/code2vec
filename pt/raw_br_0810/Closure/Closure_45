@@ -1,0 +1,2 @@
+Assignment removed when used as an expression result to Array.push
+What steps will reproduce the problem? 1. Open online closure-compiler  2. Input code:    function f() {      var a = [], b;      a.push(b = []);      b[0] = 1;      return a;    }  3. Press [Compile]    What is the expected output? What do you see instead? Except OK.  Output: function f(){var a=[];a.push([]);return a}; //wrong    What version of the product are you using? On what operating system? Current online version.  

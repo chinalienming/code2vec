@@ -1,0 +1,812 @@
+1	src/org/mockito/internal/invocation/InvocationMatcher.java内public Location getLocation()	837fd054a0da2c8706732dcd4bc880a64b957c78	4e9d7607825c3c668fd43f19507bfead566c528c	188	https://github.com/mockito/mockito/issues/188	ArgumentCaptor no longer working for varargs	Why does upgrading Mockito from 1.9.5 to 1.10.8 break this Captor?	With the latest master: new Partial(yearOfCentury(),  1).with(weekyear(), 1);
+// NullPointerException
+// org.joda.time.Partial.with (Partial.java:447)
+Fails with yearOfCentury, year and yearOfEra. Probably because weekyear has a null range duration type.
+2	src/org/mockito/internal/util/Timer.java内public Timer(long durationMillis)	d30450fa1172d79cc051b2fe8064744c2ac7a003	80452c7a42777513c35fd30c4e12bcd7ee438fb9	197	https://github.com/mockito/mockito/issues/197	Mockito.after() method accepts negative timeperiods and subsequent verifications always pass	e.g.
+Runnable runnable = Mockito.mock(Runnable.class);
+Mockito.verify(runnable, Mockito.never()).run(); // passes as expected
+Mockito.verify(runnable, Mockito.after(1000).never()).run(); // passes as expected
+Mockito.verify(runnable, Mockito.after(-1000).atLeastOnce()).run(); // passes incorrectly	src
+3	src/org/mockito/internal/invocation/InvocationMatcher.java内public void captureArgumentsFrom(Invocation invocation)外src/org/mockito/internal/invocation/InvocationMatcher.java内public void captureArgumentsFrom(Invocation invocation)	4e9d7607825c3c668fd43f19507bfead566c528c	3eec7451d6c83c280743c39b39c77a179abb30f9	188	https://github.com/mockito/mockito/issues/188	ArgumentCaptor no longer working for varargs	Why does upgrading Mockito from 1.9.5 to 1.10.8 break this Captor?	src
+4	src/org/mockito/exceptions/Reporter.java内public void noMoreInteractionsWanted(Invocation undesired, List<VerificationAwareInvocation> invocations)外src/org/mockito/exceptions/Reporter.java内public void noMoreInteractionsWantedInOrder(Invocation undesired)外src/org/mockito/exceptions/Reporter.java内private String exceptionCauseMessageIfAvailable(Exception details)	c25cb6bff7eb4774efda345e8bf9eaad4c66a652	42b391d4209024292b6101048389570e4ec36b2a	187	https://github.com/mockito/mockito/issues/187	java.lang.ClassCastException: java.lang.Class cannot be cast to java.lang.String	Exception throws on verifyZeroInteractions when using mock with default answer.
+checked on versions 1.10.5-2.0.5
+all ok on 1.9.5	src
+5	src/org/mockito/internal/verification/VerificationOverTimeImpl.java内public void verify(VerificationData data)	fff76563d9e0ed412dc828c53cfdc7d142997a31	42a24dde02923185db3f79ae57e7819f7d70af55	152	https://github.com/mockito/mockito/issues/152	Mockito 1.10.x timeout verification needs JUnit classes (VerifyError, NoClassDefFoundError)	If JUnit is not on the classpath and mockito is version 1.10.x (as of now 1.10.1 up to 1.10.19) and the code is using the timeout verification which is not supposed to be related to JUnit, then the JVM may fail with a VerifyError or a NoClassDefFoundError.
+This issue has been reported on the mailing list and on StackOverflow
+A simple test like that with TestNG (and no JUnit in the class path of course) exposes the issue:
+import org.testng.annotations.Test;
+import java.util.Observable;
+import static org.mockito.Mockito.*;
+public class VerifyErrorOnVerificationWithTimeoutTest {
+    @Test public void should_not_throw_VerifyError() {
+        verify(mock(Observable.class), timeout(500)).countObservers();
+    }
+}
+With TestNG 5.13.1, the stack trace is :
+java.lang.VerifyError: (class: org/mockito/internal/verification/VerificationOverTimeImpl, method: verify signature: (Lorg/mockito/internal/verification/api/VerificationData;)V) Incompatible argument to function
+    at org.mockito.verification.Timeout.<init>(Timeout.java:32)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:25)
+    at org.mockito.Mockito.timeout(Mockito.java:2103)
+    at com.example.UserServiceImplTest.test(UserServiceImplTest.java:26)
+TestNG includes a dependency on JUnit 3.8.1, which has the junit.framework.ComparisonFailure, but the JVM cannot perform the linking at runtime (VerifyError extends LinkageError), probably because for the JVM there's some incompatible changes in this class between version 3.x and 4.x.
+Note that Mockito is compiled against JUnit 4.x. This also reveal that Mockito is not anymore compatible with JUnit 3.x.
+With TestNG 6.8.13, the stack trace is :
+java.lang.NoClassDefFoundError: junit/framework/ComparisonFailure
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:621)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)
+    at java.net.URLClassLoader.access$000(URLClassLoader.java:58)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:197)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:32)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:25)
+    at org.mockito.Mockito.timeout(Mockito.java:2103)
+    at com.example.UserServiceImplTest.test(UserServiceImplTest.java:26)
+Caused by: java.lang.ClassNotFoundException: junit.framework.ComparisonFailure
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+    ... 49 more
+Indeed JUnit is not anymore a dependency of TestNG.
+In this specific case the issue is that the Timeout class wraps a VerficationOverTimeImpl that uses in try/catch block the exception org.mockito.exceptions.verification.junit.ArgumentsAreDifferent which extends junit.framework.ComparisonFailure.
+At this time it seems to be the only place where JUnit is needed, this affect the following public API :
+Mockito.timeout(...)
+Mockito.after(...)	src
+6	src/org/mockito/Matchers.java内public static boolean anyBoolean()外src/org/mockito/Matchers.java内public static byte anyByte()外src/org/mockito/Matchers.java内public static char anyChar()外src/org/mockito/Matchers.java内public static int anyInt()外src/org/mockito/Matchers.java内public static long anyLong()外src/org/mockito/Matchers.java内public static float anyFloat()外src/org/mockito/Matchers.java内public static double anyDouble()外src/org/mockito/Matchers.java内public static short anyShort()外src/org/mockito/Matchers.java内public static <T> T any(Class<T> clazz)外src/org/mockito/Matchers.java内public static <T> T anyObject()外src/org/mockito/Matchers.java内public static String anyString()外src/org/mockito/Matchers.java内public static List anyList()外src/org/mockito/Matchers.java内public static <T> List<T> anyListOf(Class<T> clazz)外src/org/mockito/Matchers.java内public static Set anySet()外src/org/mockito/Matchers.java内public static Set anySet()外src/org/mockito/Matchers.java内public static Map anyMap()外src/org/mockito/Matchers.java内public static Map anyMap()外src/org/mockito/Matchers.java内public static Collection anyCollection()	a7ba606944563adcdc631a2c04463a8124d26b02	dc205824dbc289acbcde919e430176ad72da847f	134	https://github.com/mockito/mockito/issues/134	Argument matcher anyXxx() (i.e. anyString(), anyList()) should not match nulls	This is a bug I'm seeing in 1.10.8 version (older version has the same issue - tested with 1.9.0).
+Given:
+Function<Object, Integer> function = Mockito.mock(Function.class);
+when(function.apply(Mockito.anyString())).thenReturn(1);
+Integer result = function.apply(2);
+Expected behavior:
+result == null;
+Actual behavior:
+result == 1;
+Note that the function is called with an integer (not a string), and still the mocked function return the value which it should return only when a string is passed. The same works when using anyBoolean() or any other methof from any* family.	src
+7	src/org/mockito/internal/util/reflection/GenericMetadataSupport.java内private void readTypeVariables()	3c8892b8a077598ecf988115214e5e01c310b08b	0aaa36ce6924ca87f88e3723771413b42b80dc5a	128	https://github.com/mockito/mockito/issues/128	Deep stubbing with generic responses in the call chain is not working	Deep stubbing will throw an Exception if multiple generics occur in the call chain. For instance, consider having a mock myMock1 that provides a function that returns a generic T. If T also has a function that returns a generic, an Exception with the message "Raw extraction not supported for : 'null'" will be thrown.
+As an example the following test will throw an Exception:
+public class MockitoGenericsDeepStubTest {
+    @Test
+    public void discoverDeepMockingOfGenerics() {
+        MyClass1 myMock1 = mock(MyClass1.class, RETURNS_DEEP_STUBS);
+        when(myMock1.getNested().getNested().returnSomething()).thenReturn("Hello World.");
+    }
+  public static interface MyClass1 <MC2 extends MyClass2> {
+        public MC2 getNested();
+    }
+    public static interface MyClass2<MC3 extends MyClass3> {
+        public MC3 getNested();
+    }
+    public static interface MyClass3 {
+        public String returnSomething();
+    }
+}
+You can make this test run if you step into the class ReturnsDeepStubs and change the method withSettingsUsing to return MockSettings with ReturnsDeepStubs instead of ReturnsDeepStubsSerializationFallback as default answer:
+private MockSettings withSettingsUsing(GenericMetadataSupport returnTypeGenericMetadata, MockCreationSettings parentMockSettings) {
+    MockSettings mockSettings = returnTypeGenericMetadata.hasRawExtraInterfaces() ?
+            withSettings().extraInterfaces(returnTypeGenericMetadata.rawExtraInterfaces())
+            : withSettings();
+    return propagateSerializationSettings(mockSettings, parentMockSettings)
+            .defaultAnswer(this);
+}
+However, this breaks other tests and features.
+I think, the issue is that further generics are not possible to be mocked by ReturnsDeepStubsSerializationFallback since the GenericMetadataSupport is "closed" at this point.
+Thanks and kind regards
+Tobias	src
+8	src/org/mockito/internal/util/reflection/GenericMetadataSupport.java内protected void registerTypeVariablesOn(Type classType)	9fb7d8b62814f959ceca6096d785b96c11bdfd0a	5a03bf5d0c9aedac9cfbf074833167c1eca6439f	114	https://github.com/mockito/mockito/issues/114	1.10 regression (StackOverflowError) with interface where generic type has itself as upper bound	Add this to GenericMetadataSupportTest:
+    interface GenericsSelfReference<T extends GenericsSelfReference<T>> {
+        T self();
+    }
+   @Test
+    public void typeVariable_of_self_type() {
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsSelfReference.class).resolveGenericReturnType(firstNamedMethod("self", GenericsSelfReference.class));
+        assertThat(genericMetadata.rawType()).isEqualTo(GenericsSelfReference.class);
+    }
+It fails on master and 1.10.8 with this:
+java.lang.StackOverflowError
+    at sun.reflect.generics.reflectiveObjects.TypeVariableImpl.hashCode(TypeVariableImpl.java:201)
+    at java.util.HashMap.hash(HashMap.java:338)
+    at java.util.HashMap.get(HashMap.java:556)
+    at org.mockito.internal.util.reflection.GenericMetadataSupport.getActualTypeArgumentFor(GenericMetadataSupport.java:193)
+    at org.mockito.internal.util.reflection.GenericMetadataSupport.getActualTypeArgumentFor(GenericMetadataSupport.java:196)
+    at org.mockito.internal.util.reflection.GenericMetadataSupport.getActualTypeArgumentFor(GenericMetadataSupport.java:196)
+It worked on 1.9.5. May be caused by the changes in ab9e9f3 (cc @bric3).
+(Also note that while the above interface looks strange, it is commonly used for builder hierarchies, where base class methods want to return this with a more specific type.)	src
+9	src/org/mockito/internal/stubbing/answers/CallsRealMethods.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/answers/CallsRealMethods.java内noLeftCurtyIn1stLine:	f45c2dc0c21f365218fa093106e45dbb0b54746a	31f908029b8cd9b1f32bed3a41651b30ebb47b9f	122	https://github.com/mockito/mockito/issues/122	Problem spying on abstract classes	There's a problem with spying on abstract classes when the real implementation calls out to the abstract method. More details: #121 As discussed previously, changing CALLS_REAL_METHOD to delegate to default answer when the method is abstract. This makes spy() more useful.	src
+10	src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内methodPartNotInFile:private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport retu外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内methodPartNotInFile:private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport retu	b00a6d252f87c886e5f8830bbdb6c1af2bd0ee9c	1beeae39ac9f79d6a0db285dec311b78025ac062	99	https://github.com/mockito/mockito/issues/99	RETURNS_DEEP_STUBS automatically tries to create serializable mocks	I am just migrating from mockito 1.9.5 to 1.10.5
+The following code runs fine with version 1.9.5. but breaks now:
+  @Test
+  public void test() {
+    ToBeMocked mock = mock(ToBeMocked.class, RETURNS_DEEP_STUBS);
+    assertThat(mock.getSomething()).isNotNull();
+  }
+  public static class ToBeMocked {
+    NotSerializableReturnValue field1;
+    public ToBeMocked(NotSerializableReturnValue field1) {
+      this.field1 = field1;
+    }
+    public NotSerializableReturnValue getSomething() {
+      return field1;
+    }
+  }
+  public static class NotSerializableReturnValue {
+    String field1 = "";
+    public NotSerializableReturnValue(String field1) {
+      this.field1 = field1;
+    }
+   public String getSomething2() {
+      return field1;
+    }
+  }
+org.mockito.exceptions.base.MockitoException:
+You are using the setting 'withSettings().serializable()' however the type you are trying to mock 'NotSerializableReturnValue'
+do not implement Serializable AND do not have a no-arg constructor.	src
+11	src/org/mockito/internal/creation/DelegatingMethod.java内public boolean isAbstract()	57be784ef15d4d4d685e59d7e855e01de81a77a5	1802cf79c482f2df29abb3d6735bcf0b16cedb7d	87	https://github.com/mockito/mockito/issues/87	Fixed DelegatingMethod.equals() so that it's easier to extend Mockito by custom verification modes	Currently if you create a DelegatingMethod and compare it to itself using .equals() it will show as not equal because the .equals() method expects a java.lang.reflect.Method (without explicitly stating such). This has a knock on effect on the evaluation of InvocationImpl.equals() which at runtime may be using a DelegatingMethod in its .equals().
+I have changed .equals() and .hashCode() in DelegatingMethod to a more appropriate implementation, which can handle both the case where the input object is a DelegatingMethod and where it is a java.lang.reflect.Method.
+I ran up against this issue when creating a custom VerificationMode which used InvocationImpl.equals() to check that the appropriate invocation was made. My comparison failed even though I was comparing two references to the same InvocationImpl instance.	src
+12	src/org/mockito/internal/util/reflection/GenericMaster.java内public Class getGenericType(Field field)	a154b66c1a87eb4ff26d91781414dde042bb9a9f	7a647a702c8af81ccf5d37b09c11529c6c0cb1b7	188	https://github.com/mockito/mockito/issues/188	ArgumentCaptor no longer working for varargs	Why does upgrading Mockito from 1.9.5 to 1.10.8 break this Captor?	src
+13	src/org/mockito/internal/MockHandler.java内public Object handle(Invocation invocation)	88100667b90c4621178fd870fa1ca43060512fc6	2037361bea014c9ac87393eb96a95374dff46182	138	https://github.com/mockito/mockito/issues/138	fix proposal for #114		src
+14	src/org/mockito/internal/MockitoCore.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/MockitoCore.java内public IOngoingStubbing stub()外src/org/mockito/internal/MockHandler.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/MockHandler.java内public Object handle(Invocation invocation)	c478a8809b640713e8ffb6da2f554dda3a3674b0	9b2cf8072ece7c7629eff6037853b3e14ab5f524	138	https://github.com/mockito/mockito/issues/138	fix proposal for #114		src
+15	src/org/mockito/internal/configuration/injection/FinalMockCandidateFilter.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/configuration/injection/FinalMockCandidateFilter.java内methodPartNotInFile:public OngoingInjecter filterCandidate(final Collection<Object> mocks, final Fie	77c6703f60d87b88b0e5b175b8fb0462483a8f69	81a380951402d2a158af115ed616ab36e94793b8	211	https://github.com/mockito/mockito/issues/211	ArgumentCaptor no longer working for varargs	Fixes #188 . These commits should fix issue with capturing varargs.	src
+16	src/org/mockito/internal/MockitoCore.java内noLeftCurtyIn1stLine:外src/org/mockito/Mockito.java内noLeftCurtyIn1stLine:外src/org/mockito/Mockito.java内noLeftCurtyIn1stLine:	188cbae7ae307e7c81c4ad321a4837dd93157b67	620f8faed0ad132961aae3a8671120e0929ce828	151	https://github.com/mockito/mockito/issues/151	Investigate why #125 did not trigger release	Investigate why #125 did not trigger release	src
+17	src/org/mockito/internal/util/MockUtil.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/util/MockUtil.java内public MockUtil()外src/org/mockito/internal/creation/MockSettingsImpl.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/creation/MockSettingsImpl.java内public MockSettings defaultAnswer(Answer defaultAnswer)	b6790ee34d8d858a89b80a9ae40f19d87ce1dab8	77cb2037314dd024eb53ffe2e9e06304088a2d53	152	https://github.com/mockito/mockito/issues/152	Mockito 1.10.x timeout verification needs JUnit classes (VerifyError, NoClassDefFoundError)	If JUnit is not on the classpath and mockito is version 1.10.x (as of now 1.10.1 up to 1.10.19) and the code is using the timeout verification which is not supposed to be related to JUnit, then the JVM may fail with a VerifyError or a NoClassDefFoundError.
+This issue has been reported on the mailing list and on StackOverflow
+A simple test like that with TestNG (and no JUnit in the class path of course) exposes the issue:
+import org.testng.annotations.Test;
+import java.util.Observable;
+import static org.mockito.Mockito.*;
+public class VerifyErrorOnVerificationWithTimeoutTest {
+    @Test public void should_not_throw_VerifyError() {
+        verify(mock(Observable.class), timeout(500)).countObservers();
+    }
+}
+With TestNG 5.13.1, the stack trace is :
+java.lang.VerifyError: (class: org/mockito/internal/verification/VerificationOverTimeImpl, method: verify signature: (Lorg/mockito/internal/verification/api/VerificationData;)V) Incompatible argument to function
+    at org.mockito.verification.Timeout.<init>(Timeout.java:32)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:25)
+    at org.mockito.Mockito.timeout(Mockito.java:2103)
+    at com.example.UserServiceImplTest.test(UserServiceImplTest.java:26)
+TestNG includes a dependency on JUnit 3.8.1, which has the junit.framework.ComparisonFailure, but the JVM cannot perform the linking at runtime (VerifyError extends LinkageError), probably because for the JVM there's some incompatible changes in this class between version 3.x and 4.x.
+Note that Mockito is compiled against JUnit 4.x. This also reveal that Mockito is not anymore compatible with JUnit 3.x.
+With TestNG 6.8.13, the stack trace is :
+java.lang.NoClassDefFoundError: junit/framework/ComparisonFailure
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:621)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)
+    at java.net.URLClassLoader.access$000(URLClassLoader.java:58)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:197)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:32)
+    at org.mockito.verification.Timeout.<init>(Timeout.java:25)
+    at org.mockito.Mockito.timeout(Mockito.java:2103)
+    at com.example.UserServiceImplTest.test(UserServiceImplTest.java:26)
+Caused by: java.lang.ClassNotFoundException: junit.framework.ComparisonFailure
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+    ... 49 more
+Indeed JUnit is not anymore a dependency of TestNG.
+In this specific case the issue is that the Timeout class wraps a VerficationOverTimeImpl that uses in try/catch block the exception org.mockito.exceptions.verification.junit.ArgumentsAreDifferent which extends junit.framework.ComparisonFailure.
+At this time it seems to be the only place where JUnit is needed, this affect the following public API :
+Mockito.timeout(...)
+Mockito.after(...)	src
+18	src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java内Object returnValueFor(Class<?> type)	6237bd6e841dcae7b0e4d8cc3d0b7e14bf6694cc	8ceb04ad7317d8db24476b3b5f56ec9f658bc43a	210	https://github.com/mockito/mockito/issues/210	Return empty value for Iterables	http://code.google.com/p/mockito/issues/detail?id=175
+I expect an Iterable to be mocked by default with an empty Iterable. I understand from the initial issue this behavior would be introduced in Mockito 2, but beta-8 still returns null.
+Could we return null for Iterables ?
+Should we have the same behavior for Iterator ?
+Thanks	src
+19	src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java内public NameBasedCandidateFilter(MockCandidateFilter next)外src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java内public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, Object fieldInstance)外src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java内public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, Object fieldInstance)外src/org/mockito/internal/configuration/injection/PropertyAndSetterInjection.java内methodPartNotInFile:private boolean injectMockCandidates(Class<?> awaitingInjectionClazz, Set<Object外src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/configuration/injection/filter/MockCandidateFilter.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java内public TypeBasedCandidateFilter(MockCandidateFilter next)外src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java内methodPartNotInFile:public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, Ob	03028f0095d527ff9bd84bc929fc4931f17abf13	110ffa80070bf54ab8efabdaaa27b193a93d6128	205	https://github.com/mockito/mockito/issues/205	InjectMocks injects mock into wrong field	Using 1.10.19.
+When using @InjectMocks on some Android TextViews, the mock is injected into the wrong field.
+We have two fields, txtGateView & txtNextStep in a class, and our test mocks out txtNextStep, then tried to inject. This field is injected wrong, see screenshot.
+From our quick testing, the name txtNextView doesn't matter, that can be changed. But both txtGateView and txtGateLabel messed things up. If we mock out both fields, it works correctly.
+Testproject: https://github.com/SimenB/emptyandroid
+I don't know if it's because it's Android, but it was easiest for me to create a minimal test from existing code.	src
+20	src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java内public ByteBuddyMockMaker()外src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java内public ByteBuddyMockMaker()	98610b68e93e75a5b1db2687894bb30ff2b09c90	7616cd17d5e1dc7c3dee080c6969183821d4797a	92	https://github.com/mockito/mockito/issues/92	Allow convenient spying on abstract classes	I posted this in GoogleCode and was asked to submit in github.
+Mockito is easy to use when the test needs to provide canned values for a certain method.
+But it gets harder when a canned value isn't sufficient.
+Example 1: Fake with trivial Logic
+interface UserAccount {
+  List<String> getEmails();
+  void addEmail(String email);
+  // 12 other methods ...
+}
+When mocking such domain entity object, it's tedious to manually program getEmails()/addEmail() with when().thenReturn() and to make sure the two methods are logically consistent, that is, getEmails() returns all emails added.
+Example 2: callback-style API
+interface AccountService {
+  void getAccount(String id, AsyncCallback<UserAccount> callback);
+}
+Stubbing AccountService isn't easy. It'd require use of Answer, and the Answer API isn't statically type safe:
+when(service.getAccount(eq(id), any(AsyncCallback.class)).thenAnswer(new Answer<Void>() {
+  AsyncCallback<UserAccount> callback = (AsyncCallback<UserAccount>) getArguments()[1];
+  ...
+});
+Example 3: Uninteresting parameters
+interface AccountRpcService {
+  FutureAccount getAccount(RpcContext context, String id);
+}
+None of the tests care about the context object. It's an uninteresting parameter imposed by the framework.
+If AccountRpcService were directly mocked, all tests would have to use isA() to repetitively mention this uninteresting parameter, like this:
+when(service.getAccount(isA(RpcContext.class), eq("id")).thenReturn(...);
+And all other parameters are required to be wrapped in eq().
+Proposal
+I propose adding support for abstract classes to mockito to make it easier to deal with tests like above:
+For example 1
+abstract class FakeUserAccount implements UserAccount {
+  private final List<String> emails = new ArrayList<>();
+  @Override public void addEmail(String email) {
+    emails.add(email);
+  }
+  @Override List<String> getEmails() {
+    return ImmutableList.copyOf(emails);
+  }
+}
+@Fake private FakeUserAccount userAccount; // Mockito instantiates abstract class.
+For example 2
+abstract class MockAccountService implements AccountService {
+  @Override public void getAccount(String id, AsyncCallback<UserAccount> callback) {
+    callback.onSuccess(getAccount(id));
+  }
+  abstract UserAccount getAccount(String id);
+}
+@Fake private MockAccountService service;
+...
+when(service.getAccount("id")).thenReturn(account);
+For example 3
+abstract class MockAccountRpcService implements AccountRpcService {
+  @Override Future<Account> getAccount(RpcContext context, String id) {
+    checkNotNull(context);  // Common sanity test. Don't have to repeat it in tests.
+    return getAccount(id);
+  }
+  abstract Future<Account> getAccount(String id);
+}
+@Fake private MockAccountRpcService service;
+when(service.getAccount("id")).thenReturn(...);
+My work place internally implemented a default Answer to support abstract classes. We found that the support of abstract classes helps us to avoid overusing mocks when we should be using fakes. And in situations like above we get cleaner test code.
+But because it's not integrated in the core Mockito, there are gotchas with our implementation (like, you can't have private/final methods in your fake).
+If the idea sounds okay to give a try, I'll volunteer to submit a patch.
+Thanks!	src
+21	src/org/mockito/internal/creation/instance/ConstructorInstantiator.java内public ConstructorInstantiator(Object outerClassInstance)外src/org/mockito/internal/creation/instance/ConstructorInstantiator.java内public ConstructorInstantiator(Object outerClassInstance)	c03a47fb2d3d4df94ba608c26a0a7570798b3611	8912aa176ea8414c2fc57df0d9b030b918630e9f	92	https://github.com/mockito/mockito/issues/92	Allow convenient spying on abstract classes	I posted this in GoogleCode and was asked to submit in github.
+Mockito is easy to use when the test needs to provide canned values for a certain method.
+But it gets harder when a canned value isn't sufficient.
+Example 1: Fake with trivial Logic
+interface UserAccount {
+  List<String> getEmails();
+  void addEmail(String email);
+  // 12 other methods ...
+}
+When mocking such domain entity object, it's tedious to manually program getEmails()/addEmail() with when().thenReturn() and to make sure the two methods are logically consistent, that is, getEmails() returns all emails added.
+Example 2: callback-style API
+interface AccountService {
+  void getAccount(String id, AsyncCallback<UserAccount> callback);
+}
+Stubbing AccountService isn't easy. It'd require use of Answer, and the Answer API isn't statically type safe:
+when(service.getAccount(eq(id), any(AsyncCallback.class)).thenAnswer(new Answer<Void>() {
+  AsyncCallback<UserAccount> callback = (AsyncCallback<UserAccount>) getArguments()[1];
+  ...
+});
+Example 3: Uninteresting parameters
+interface AccountRpcService {
+  FutureAccount getAccount(RpcContext context, String id);
+}
+None of the tests care about the context object. It's an uninteresting parameter imposed by the framework.
+If AccountRpcService were directly mocked, all tests would have to use isA() to repetitively mention this uninteresting parameter, like this:
+when(service.getAccount(isA(RpcContext.class), eq("id")).thenReturn(...);
+And all other parameters are required to be wrapped in eq().
+Proposal
+I propose adding support for abstract classes to mockito to make it easier to deal with tests like above:
+For example 1
+abstract class FakeUserAccount implements UserAccount {
+  private final List<String> emails = new ArrayList<>();
+  @Override public void addEmail(String email) {
+    emails.add(email);
+  }
+  @Override List<String> getEmails() {
+    return ImmutableList.copyOf(emails);
+  }
+}
+@Fake private FakeUserAccount userAccount; // Mockito instantiates abstract class.
+For example 2
+abstract class MockAccountService implements AccountService {
+  @Override public void getAccount(String id, AsyncCallback<UserAccount> callback) {
+    callback.onSuccess(getAccount(id));
+  }
+  abstract UserAccount getAccount(String id);
+}
+@Fake private MockAccountService service;
+...
+when(service.getAccount("id")).thenReturn(account);
+For example 3
+abstract class MockAccountRpcService implements AccountRpcService {
+  @Override Future<Account> getAccount(RpcContext context, String id) {
+    checkNotNull(context);  // Common sanity test. Don't have to repeat it in tests.
+    return getAccount(id);
+  }
+  abstract Future<Account> getAccount(String id);
+}
+@Fake private MockAccountRpcService service;
+when(service.getAccount("id")).thenReturn(...);
+My work place internally implemented a default Answer to support abstract classes. We found that the support of abstract classes helps us to avoid overusing mocks when we should be using fakes. And in situations like above we get cleaner test code.
+But because it's not integrated in the core Mockito, there are gotchas with our implementation (like, you can't have private/final methods in your fake).
+If the idea sounds okay to give a try, I'll volunteer to submit a patch.
+Thanks!	src
+22	src/org/mockito/internal/matchers/Equality.java内noLeftCurtyIn1stLine:	920ec4c3efe3133aa5009fcc9757a3cd07c5ac02	d0c872e4b0837aef1e1635bf5f15d33c3d8d9698	484	https://github.com/mockito/mockito/issues/484	Can not Return deep stubs from generic method that returns generic type	Hey,
+if I try to mock a generic method which a generic returntype, where the returntype is derived from the generic type of the method using deep stubs I get a ClassCastException when calling when on it.
+interface I {
+    <T> Supplier<T> m(Class<T> type);
+}
+@Test
+public void test() throws Exception {
+    I i = mock(I.class, RETURNS_DEEP_STUBS);
+    when(i.m(Boolean.class).get()); // <- ClassCastException
+}
+When you don't use deep stubs and a raw Supplier mock to pass around it works:
+I i = mock(I.class);
+Supplier s = mock(Supplier.class);
+when(i.m(Boolean.class)).thenReturn(s);
+when(i.m(Boolean.class).get());
+The ClassCastException:
+java.lang.ClassCastException: org.mockito.internal.creation.cglib.ClassImposterizer$ClassWithSuperclassToWorkAroundCglibBug$$EnhancerByMockitoWithCGLIB$$cdb13154 cannot be cast to java.lang.String
+  at MockitoGenerics.test(MockitoGenerics.java:21)
+  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  at java.lang.reflect.Method.invoke(Method.java:483)
+  at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
+  at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+  at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44)
+  at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+  at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271)
+  at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:70)
+  at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+  at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)
+  at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)
+  at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)
+  at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)
+  at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)
+  at org.junit.runners.ParentRunner.run(ParentRunner.java:309)
+  at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+  at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+  at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+  at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+  at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+  at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Tested using mockito 1.10.19, jdk 1.8.0_20 and no Powermock	src
+23	src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内public Object answer(InvocationOnMock invocation)外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内methodPartNotInFile:private MockSettings withSettingsUsing(GenericMetadataSupport returnTypeGenericM外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内protected GenericMetadataSupport actualParameterizedType(Object mock)外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内public Object answer(InvocationOnMock invocation)	c17169c2cbb0b3d055d64ec2c4859122ca919c42	82935114a09390cbab0c6b6df9b6fd6788bf55d9	399	https://github.com/mockito/mockito/issues/399	WrongTypeOfReturnValue when abstract class have two abstract method	Hey
+I found a strange problem, when i create a abstract class:
+abstract class AbstractClass {
+    abstract protected Long lol();
+    abstract protected String wow();
+    public String give() {
+        wow();
+        lol();
+        return "give";
+    }
+}
+and i have another class extends abstract Class:
+public class ClassExtendsAbstractClass extends AbstractClass {
+@Override
+ protected Long lol() {
+        return 2L;
+    }
+    @Override
+    protected String wow() {
+        return "WOW";
+    }
+}
+and I have class:
+public class A {
+  private ClassExtendsAbstractClass classExtendsAbstractClass;
+  public A(ClassExtendsAbstractClass classExtendsAbstractClass) {
+    this.classExtendsAbstractClass = classExtendsAbstractClass;
+  }
+  public String doSomeThing(){
+    return classExtendsAbstractClass.wow();
+  }
+}
+and when i try mock method doSomeThing() from A class in test:
+  @Mock
+  private ClassExtendsAbstractClass classExtendsAbstractClass;
+  private A a;
+  @Before
+  public void before(){
+    Mockito.when(classExtendsAbstractClass.give()).thenReturn("aaa");
+  }
+  @Test
+  public void test() {
+    a = new A(classExtendsAbstractClass);
+  }
+I get the error:
+org.mockito.exceptions.misusing.WrongTypeOfReturnValue:
+String cannot be returned by lol()
+lol() should return Long
+This is strange behavior, because the method lol() should not be called, but when I delete one abstract method everything is good.	src
+24	src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java内public Object answer(InvocationOnMock invocation)	585b06d890b5e78857a5c5d5a2301065c2cac08b	c17169c2cbb0b3d055d64ec2c4859122ca919c42	467	https://github.com/mockito/mockito/issues/467	fix some rawtype warnings in tests		src
+25	src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内public Object answer(InvocationOnMock invocation)外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内private Object getMock(InvocationOnMock invocation)外src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java内private Object getMock(InvocationOnMock invocation)	d8b18f2e77c3f352677a6993225c4333b98d0481	a6ccf070a267e0a165b8efaaefa8938e787bb6a0	230	https://github.com/mockito/mockito/issues/230	Null Pointer when invoking Whitebox.invokeMethod() with null one of the params null	Getting below exceptions when trying to invoke Whitebox.invokeMethod(erxProviderManager, "setCommand", Provider, null,retait, mail);
+Version used 1.6.2
+FAILED: testSetEnrollmentCommandWithUnEnrollmentWithNull
+java.lang.NullPointerException
+at java.lang.Class.isAssignableFrom(Native Method)
+at org.powermock.reflect.internal.WhiteboxImpl.checkIfParameterTypesAreSame(WhiteboxImpl.java:2257)
+at org.powermock.reflect.internal.WhiteboxImpl.getMethods(WhiteboxImpl.java:1800)
+at org.powermock.reflect.internal.WhiteboxImpl.getBestMethodCandidate(WhiteboxImpl.java:955)
+at org.powermock.reflect.internal.WhiteboxImpl.findMethodOrThrowException(WhiteboxImpl.java:832)
+at org.powermock.reflect.internal.WhiteboxImpl.doInvokeMethod(WhiteboxImpl.java:770)
+at org.powermock.reflect.internal.WhiteboxImpl.invokeMethod(WhiteboxImpl.java:638)
+at org.powermock.reflect.Whitebox.invokeMethod(Whitebox.java:401)	src
+26	src/org/mockito/internal/util/Primitives.java内public static boolean isPrimitiveWrapper(Class<?> type)	41441c6b00e64c9f1f1275ff01a0ac4f7c4ae13e	af44738c7de74f24e37ea0c1242e73b07c3f4362	352	https://github.com/mockito/mockito/issues/352	use @InjectMocks for final fields	I'm trying to upgrade the mockito version that we're using (1.8.5) to a newer version but there is a problem with @InjectMocks which since 1.9.0 doesn't inject into final field anymore.
+Were there any reasons for that feature to be removed?
+Is there another way to achieve this without polutting our class with useless (outside testing context) constructors / accessors?
+Is there a possibility to get that feature back?	src
+27	src/org/mockito/internal/util/MockUtil.java内public MockUtil()	19ade1ff81503b05a34ba8fff4ee9c9b63860587	a8ec4fa290bc1cdde060218d6bb811ac1fa6da6f	282	https://github.com/mockito/mockito/issues/282	Exception when stubbing more than once with when...thenThrow	If I create a mock and stub a method so it throws an exception and do that twice the first exception will be thrown upon invoking the second stub instruction.
+Example:
+@Test
+public void testThrowException() {
+    Object o = Mockito.mock(Object.class);
+    // test behavior with Runtimeexception
+    Mockito.when(o.toString()).thenThrow(RuntimeException.class);
+    // ...
+    // test behavior with another exception
+    // this throws a RuntimeException
+    Mockito.when(o.toString()).thenThrow(IllegalArgumentException.class);
+    // ...
+}
+I can work around this if I do it the other way around with doThrow...when. But I lose type safety then. Can you fix this?	src
+28	src/org/mockito/internal/configuration/DefaultInjectionEngine.java内methodPartNotInFile:public void injectMocksOnFields(Set<Field> injectMocksFields, Set<Object> mocks,	7639f331b8c002647dd02f914bbd3f3203832cb9	0464f5657dc8c76a4ff209a2cf7fd6312885cdc3	236	https://github.com/mockito/mockito/issues/236	nicer textual printing of typed parameters	When matchers fail but yield the same toString(), Mockito prints extra type information. However, the type information is awkwardly printed for Strings. I've encountered this issue while working on removing hard dependency to hamcrest.
+//current:
+someMethod(1, (Integer) 2);
+someOther(1, "(String) 2");
+//desired:
+someOther(1, (String) "2");	src
+29	src/org/mockito/internal/matchers/Same.java内public boolean matches(Object actual)	df41fbe00b1300cfe5076bb4e9242214fbe677f9	918f0a5aed6454b307004b6c9c86afc8e96353ff	229	https://github.com/mockito/mockito/issues/229	Fixes #228: fixed a verify() call example in @Captor javadoc		src
+30	src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java内methodPartNotInFile:public Object intercept(Object obj, Method method, Object[] args, MethodProxy pr外src/org/mockito/exceptions/Reporter.java内public void misplacedArgumentMatcher(Location location)	62b6bdf44baeee172b2b1684835fb995bad2a47d	3c924f80a4db3692a13341f0da4517052ab77a2a	225	https://github.com/mockito/mockito/issues/225	Failing tests on Windows machine	I just posted on the Google Forums, but someway somehow my post immediately disappeared in the void. So I am reposting it again here.
+I have 3 failing tests on my Windows 8.1 machine.
+DefaultMockingDetailsTest.should_get_extra_interfaces
+NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy
+ClassLoadersTest.excluding_class_loader_cannot_load_classes_when_no_correct_source_url_set
+For the first test, I was able to let it pass by changing line https://github.com/mockito/mockito/blob/master/test/org/mockito/internal/util/DefaultMockingDetailsTest.java#L56 to
+Bar bar = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
+I am not sure if this is indeed the correct test, so please let me know.
+For the 2nd test, I first get the stack trace
+java.lang.AssertionError: 'org\mockito\configuration\MockitoConfiguration' has some dependency to JUnit
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:40)
+    at org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy(NoJUnitDependenciesTest.java:32)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+    at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+    at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+    at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+    at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+    at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+    at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+    at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+    at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+    at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+    at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+    at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+    at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: java.lang.NoClassDefFoundError: org\mockito\configuration\MockitoConfiguration (wrong name: org/mockito/configuration/MockitoConfiguration)
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.Class.forName0(Native Method)
+    at java.lang.Class.forName(Class.java:348)
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:38)
+    ... 24 more
+When I change line https://github.com/mockito/mockito/blob/master/test/org/mockitoutil/ClassLoaders.java#L361 to
+String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).replace('/', '.').replace('\\', '.');
+I get the following stack trace:
+java.lang.AssertionError: 'org.mockito.internal.progress.TimesTest' has some dependency to JUnit
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:40)
+    at org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy(NoJUnitDependenciesTest.java:32)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+    at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+    at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+    at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+    at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+    at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+    at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+    at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+    at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+    at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+    at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+    at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+    at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: java.lang.NoClassDefFoundError: junit/framework/Assert
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.Class.forName0(Native Method)
+    at java.lang.Class.forName(Class.java:348)
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:38)
+    ... 24 more
+Caused by: java.lang.ClassNotFoundException: classes with prefix : [junit, org.junit] are excluded
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:155)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    ... 51 more
+The reason I changed that line is because the temp result does not contain dots on windows machines, due to the fact that absolutepath does not return a path seperated by / but by \\.
+However then the test fails because the TimesTest in test/ does indeed depend on junit. Shouldn't it only load classes that are under src/?
+The 3rd test I sadly have no clue why it is succeeding and not throwing an exception.
+Looking forward to your responses =]	src
+31	src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java内methodPartNotInFile:public Object intercept(Object obj, Method method, Object[] args, MethodProxy pr	81a380951402d2a158af115ed616ab36e94793b8	62b6bdf44baeee172b2b1684835fb995bad2a47d	225	https://github.com/mockito/mockito/issues/225	Failing tests on Windows machine	I just posted on the Google Forums, but someway somehow my post immediately disappeared in the void. So I am reposting it again here.
+I have 3 failing tests on my Windows 8.1 machine.
+DefaultMockingDetailsTest.should_get_extra_interfaces
+NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy
+ClassLoadersTest.excluding_class_loader_cannot_load_classes_when_no_correct_source_url_set
+For the first test, I was able to let it pass by changing line https://github.com/mockito/mockito/blob/master/test/org/mockito/internal/util/DefaultMockingDetailsTest.java#L56 to
+Bar bar = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
+I am not sure if this is indeed the correct test, so please let me know.
+For the 2nd test, I first get the stack trace
+java.lang.AssertionError: 'org\mockito\configuration\MockitoConfiguration' has some dependency to JUnit
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:40)
+    at org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy(NoJUnitDependenciesTest.java:32)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+    at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+    at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+    at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+    at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+    at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+    at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+    at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+    at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+    at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+    at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+    at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+    at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: java.lang.NoClassDefFoundError: org\mockito\configuration\MockitoConfiguration (wrong name: org/mockito/configuration/MockitoConfiguration)
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.Class.forName0(Native Method)
+    at java.lang.Class.forName(Class.java:348)
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:38)
+    ... 24 more
+When I change line https://github.com/mockito/mockito/blob/master/test/org/mockitoutil/ClassLoaders.java#L361 to
+String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).replace('/', '.').replace('\\', '.');
+I get the following stack trace:
+java.lang.AssertionError: 'org.mockito.internal.progress.TimesTest' has some dependency to JUnit
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:40)
+    at org.mockitointegration.NoJUnitDependenciesTest.pure_mockito_should_not_depend_JUnit___ByteBuddy(NoJUnitDependenciesTest.java:32)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+    at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+    at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+    at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+    at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+    at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+    at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+    at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+    at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+    at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+    at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+    at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+    at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+    at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+    at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: java.lang.NoClassDefFoundError: junit/framework/Assert
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.ClassLoader.defineClass1(Native Method)
+    at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+    at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+    at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+    at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:156)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.Class.forName0(Native Method)
+    at java.lang.Class.forName(Class.java:348)
+    at org.mockitointegration.NoJUnitDependenciesTest.checkDependency(NoJUnitDependenciesTest.java:38)
+    ... 24 more
+Caused by: java.lang.ClassNotFoundException: classes with prefix : [junit, org.junit] are excluded
+    at org.mockitoutil.ClassLoaders$LocalExcludingURLClassLoader.findClass(ClassLoaders.java:155)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    ... 51 more
+The reason I changed that line is because the temp result does not contain dots on windows machines, due to the fact that absolutepath does not return a path seperated by / but by \\.
+However then the test fails because the TimesTest in test/ does indeed depend on junit. Shouldn't it only load classes that are under src/?
+The 3rd test I sadly have no clue why it is succeeding and not throwing an exception.
+Looking forward to your responses =]	src
+32	src/org/mockito/internal/configuration/SpyAnnotationEngine.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/configuration/SpyAnnotationEngine.java内public void process(Class<?> context, Object testClass)	d973b6f4fd6aad3b17a1758c920a3b962269b2ba	4f7060cc54bb50292ccfbf3b9fca27f0282abf51	216	https://github.com/mockito/mockito/issues/216	Mockito can't create mock on public class that extends package-private class	I created simple project to demonstrate this:
+https://github.com/astafev/mockito-package-private-class/
+Please take a look. Even if it can't be implemented, I think that mockito should throw some normal exception at time of creation.
+In my variant on first creation it returns wrong-working mock (invokes real method instead of stubbed). On second creation throws exception that doesn't really connected with problem.
+Everything works fine if you mock package-private parent.	src
+33	src/org/mockito/internal/invocation/InvocationMatcher.java内public boolean hasSameMethod(Invocation candidate)	57bafd2c3ad7db992667b7f9d56dfe9aca0d82f4	5cb37751c0aba81d025dc5fe4f2f9a3bf86cc958	200	https://github.com/mockito/mockito/issues/200	ArgumentCaptor.fromClass's return type should match a parameterized type	ArgumentCaptor.fromClass's return type should match a parameterized type. I.e. the expression ArgumentCaptor.fromClass(Class<S>) should be of type ArgumentCaptor<U> where S is a subtype of U.
+For example:
+ArgumentCaptor<Consumer<String>> captor = ArgumentCaptor.fromClass(Consumer.class)
+does not type check (i.e. it is a compile time error). It should type check.
+The reasons that it is desirable for ArgumentCaptor.fromClass to allow expressions such as the example above to type check are:
+ArgumentCaptor.fromClass is intended to be a convenience method to allow the user to construct an ArgumentCaptor without casting the returned value.
+Currently, the user can devise a workaround such as:
+ArgumentCaptor<? extends Consumer<String>> captor 
+= ArgumentCaptor.fromClass(Consumer.class)
+This workaround is inconvenient, and so contrary to ArgumentCaptor.fromClass being a convenience method.
+It is inconsistent with @Captor, which can be applied to a field with a paramterized type. I.e.
+@Captor ArgumentCaptor<Consumer<String>> captor 
+type checks.	src
+34	src/org/mockito/internal/invocation/InvocationMatcher.java内public String toString(PrintSettings printSettings)	0ebc2ea06b5abdb441a57a8e0f01305a7839c3d9	e8cebe01abae49a09aadd6a26c6f7e2f90e5e772	157	https://github.com/mockito/mockito/issues/157	Source files should not be put in binary JAR	Source files (*.java) should not be put into binary mockito-core.jar. It stupefies Idea to show decompiled file even when source jar is available.	src
+35	src/org/mockito/Matchers.java内public static Collection anyCollection()外src/org/mockito/Matchers.java内public static short eq(short value)外src/org/mockito/Matchers.java内public static short eq(short value)	bff7ae0f4db9c5c0f7bfcdd3a47d4fa0fdaa1232	27a2f515197d4688c4df82afb791bf8ce20a5504	98	https://github.com/mockito/mockito/issues/98	possible NPE exception when class cannot be mocked via PowerMockito	In version 1.10.5, the catch block needs to guard against a null proxyInstance:
+java.lang.NullPointerException
+at org.mockito.internal.creation.jmock.ClassImposterizer.imposterise(ClassImposterizer.java:65)
+at org.powermock.api.mockito.internal.mockcreation.MockCreator.createMethodInvocationControl(MockCreator.java:111)
+at org.powermock.api.mockito.internal.mockcreation.MockCreator.mock(MockCreator.java:60)
+at org.powermock.api.mockito.PowerMockito.mock(PowerMockito.java:143)
+at com.seagullsw.appinterface.server.osgi.JCicsOsgiTestCase.executeOsgiRequest(JCicsOsgiTestCase.java:167)
+at com.seagullsw.appinterface.server.osgi.JCicsOsgiTestCase.executeOsgiRequest(JCicsOsgiTestCase.java:122)
+at com.seagullsw.appinterface.server.osgi.JCicsOsgiTestCase.checkFunctionReturnString(JCicsOsgiTestCase.java:99)
+at com.seagullsw.appinterface.server.osgi.JCicsOsgiTestCase.testJcicsOsgiRoundtrip(JCicsOsgiTestCase.java:230)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:606)
+at org.junit.internal.runners.TestMethod.invoke(TestMethod.java:68)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl$PowerMockJUnit44MethodRunner.runTestMethod(PowerMockJUnit44RunnerDelegateImpl.java:310)
+at org.junit.internal.runners.MethodRoadie$2.run(MethodRoadie.java:88)
+at org.junit.internal.runners.MethodRoadie.runBeforesThenTestThenAfters(MethodRoadie.java:96)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl$PowerMockJUnit44MethodRunner.executeTest(PowerMockJUnit44RunnerDelegateImpl.java:294)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit47RunnerDelegateImpl$PowerMockJUnit47MethodRunner.executeTestInSuper(PowerMockJUnit47RunnerDelegateImpl.java:127)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit47RunnerDelegateImpl$PowerMockJUnit47MethodRunner.executeTest(PowerMockJUnit47RunnerDelegateImpl.java:82)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl$PowerMockJUnit44MethodRunner.runBeforesThenTestThenAfters(PowerMockJUnit44RunnerDelegateImpl.java:282)
+at org.junit.internal.runners.MethodRoadie.runTest(MethodRoadie.java:86)
+at org.junit.internal.runners.MethodRoadie.run(MethodRoadie.java:49)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl.invokeTestMethod(PowerMockJUnit44RunnerDelegateImpl.java:207)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl.runMethods(PowerMockJUnit44RunnerDelegateImpl.java:146)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl$1.run(PowerMockJUnit44RunnerDelegateImpl.java:120)
+at org.junit.internal.runners.ClassRoadie.runUnprotected(ClassRoadie.java:33)
+at org.junit.internal.runners.ClassRoadie.runProtected(ClassRoadie.java:45)
+at org.powermock.modules.junit4.internal.impl.PowerMockJUnit44RunnerDelegateImpl.run(PowerMockJUnit44RunnerDelegateImpl.java:122)
+at org.powermock.modules.junit4.common.internal.impl.JUnit4TestSuiteChunkerImpl.run(JUnit4TestSuiteChunkerImpl.java:104)
+at org.powermock.modules.junit4.common.internal.impl.AbstractCommonPowerMockRunner.run(AbstractCommonPowerMockRunner.java:53)
+at org.powermock.modules.junit4.PowerMockRunner.run(PowerMockRunner.java:53)
+at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)	src
+36	src/org/mockito/internal/invocation/Invocation.java内noLeftCurtyIn1stLine:外src/org/mockito/internal/invocation/Invocation.java内public int getArgumentsCount()	ecbd951497132c68dd2b264d7014251e33acba92	84c142f56fe971ed52ecfe42b42bc0aa7bef8354	140	https://github.com/mockito/mockito/issues/140	Make Mockito JUnit rule easier to use	Mockito JUnit rule easier to use by avoiding the need to pass test instance
+Make it compatible with JUnit 4.7+ instead of 4.9+	src
+37	src/org/mockito/internal/stubbing/answers/AnswersValidator.java内public void validate(Answer<?> answer, Invocation invocation)	3b603ebf4bd3b416a2a00b7729233ae44ec75943	c0222c2dbfbd2b053961a46e4c2a3973aec55a75	140	https://github.com/mockito/mockito/issues/140	Make Mockito JUnit rule easier to use	Mockito JUnit rule easier to use by avoiding the need to pass test instance
+Make it compatible with JUnit 4.7+ instead of 4.9+	src
+38	src/org/mockito/internal/verification/argumentmatching/ArgumentMatchingTool.java内private boolean safelyMatches(Matcher m, Object arg)	a663d2fe76bf1ff54bbe59bddcb52f9badec3f2a	c1f2c4e6b5bab4cfc004f22999e11e8ac140d377	79	https://github.com/mockito/mockito/issues/79	Generate change list separated by types using labels	As discussed on the mailing list instead of one big list of "Improvements" the change list for the release is divided into change types based on labels. It is required to specify which labels should be considered separately. Some other labels can be excluded (like "question" or "refactoring").
+new ReleaseNotesBuilderFactory(project)
+(...)
+    .showSeparatelyChangesWithLabelMappings(["enhancement": "Improvements", "bug": "Fixed bugs", "doc": "Documentation"])
+    .ignoreChangesWithLabels(["refactoring", "invalid", "question", "wontfix", "duplicate"])
+There is also headerForOtherChanges method to override default "Other" header.
+I changed internally Improvement to Change to better give meaning of change, but it is done in a separate commit, so can be easily reverted/amended if you don't like it (or have a better name).
+Sample changelog generated for current release. Number of issues is the same as with the old mechanism. Many of them are placed in "Other" section as don't have labels assigned.
+Changes: 20
+Improvements: 11
+Improved the javadoc example of custom Answer implementation (#22)
+Avoided classloader issue when testing in Eclipse plugins environment (#24)
+Removed .java files from main mockito jar artifacts (#28)
+Smarter constructor injection by choosing "biggest" constructor instead of the default one (#29)
+Deep stub style mocks can be serialized (#30)
+Fixed the behavior of compareTo method of the mock objects (#32)
+New "MockingDetails.getInvocations" method for inspecting what happened with the mock (#10)
+Mock serialization/deserialization across classloader/JVM (#5)
+Improved MockitoTestNGListener by making it reset argument captors before each test (#6)
+Improve NoInteractionsWanted report to include the name of the mock (#63)
+New "getArgumentAt" method for convenient implementation of custom Answers (#41)
+Fixed bugs: 1
+Allow calling real implementation of jdk8 extension methods (#39)
+Documentation: 0
+Other: 8
+Fixed wrong javadoc for AdditionalAnswers (#56)
+Added useful links to README.md (#58)
+Deprecated timeout().never(), in line with timeout().atMost() (#14)
+Verification with timout measures time more more accurately (#15)
+New "then" method for BDD-style interaction testing (#38)
+Enabled continuous integration with Travis CI and coverage tracking with coveralls (#18)
+Coveralls coverage tracking tool allows Mockito source code preview (#62)
+Improved behavior of EqualsWithDelta with regards to null handling (#21)
+I have to take a look why some labelled issues were ommited (in both mechanisms).
+What do you think about that?	src

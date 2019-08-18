@@ -1,0 +1,2 @@
+@inheritDoc doesn't play well with interfaces
+If I use interface inheritance with @inheritDoc, the compiler doesn't   know about the types used in the method signature.    Sample code:    /**   * Interface   * @interface   */  A = function() {};    /**   * @param {string} a   */  A.prototype.foo = function(a) {};    /**   * @constructor   * @implements {A}   */  B = function() {};    /**   * @inheritDoc   */  B.prototype.foo = function(a) {    alert(a.substring(0));   //  ERROR - could not determine the type of   this expression  };
